@@ -1,6 +1,8 @@
 package com.akhilesh.employeemanager.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -8,7 +10,6 @@ import java.util.UUID;
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(unique = true, nullable = false)
     private UUID id;
     @Column(nullable = false)
     private String name;
@@ -19,6 +20,12 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee")
+    private List<Task> tasks;
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee")
+    private List<Attendance> attendances;
 
     public Department getDepartment() {
         return department;
@@ -31,12 +38,14 @@ public class Employee {
     public Employee(){
     }
 
-    public Employee(String name, String email, String phone, String role, Department department){
+    public Employee(String name, String email, String phone, String role, Department department, List<Task> tasks, List<Attendance> attendances){
         this.name=name;
         this.email=email;
         this.phone=phone;
         this.role=role;
         this.department = department;
+        this.tasks = tasks;
+        this.attendances = attendances;
     }
 
 
@@ -91,4 +100,19 @@ public class Employee {
                 '}';
     }
 
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public List<Attendance> getAttendances() {
+        return attendances;
+    }
+
+    public void setAttendances(List<Attendance> attendances) {
+        this.attendances = attendances;
+    }
 }

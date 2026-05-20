@@ -1,7 +1,9 @@
 package com.akhilesh.employeemanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -10,14 +12,20 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String department_name;
+    private String departmentName;
     private String location;
+    @JsonIgnore
+    @OneToMany(mappedBy = "department")
+    private List<Employee> employees;
 
-    public Department(){}
-
-    public Department(String department_name,String location){
-        this.department_name=department_name;
+    public Department(String departmentName, String location, List<Employee> employees){
+        this.departmentName=departmentName;
         this.location=location;
+        this.employees = employees;
+    }
+
+    public Department() {
+
     }
 
     public UUID getId() {
@@ -28,12 +36,12 @@ public class Department {
         this.id = id;
     }
 
-    public String getDepartment_name() {
-        return department_name;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartment_name(String department_name) {
-        this.department_name = department_name;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public String getLocation() {
@@ -42,5 +50,13 @@ public class Department {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
     }
 }

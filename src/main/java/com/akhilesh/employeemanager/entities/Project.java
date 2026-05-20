@@ -1,7 +1,10 @@
 package com.akhilesh.employeemanager.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -10,14 +13,18 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String project_name;
-    private String deadline;
+    private String projectName;
+    private LocalDate deadline;
     private String status;
+    @JsonIgnore
+    @OneToMany(mappedBy = "project")
+    private List<Task> tasks;
 
-    public Project(String projectName, String deadline, String status) {
-        this.project_name = projectName;
+    public Project(String projectName, LocalDate deadline, String status, List<Task> tasks) {
+        this.projectName = projectName;
         this.deadline = deadline;
         this.status = status;
+        this.tasks = tasks;
     }
 
     public Project() {
@@ -32,19 +39,19 @@ public class Project {
         this.id = id;
     }
 
-    public String getProject_name() {
-        return project_name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public void setProject_name(String project_name) {
-        this.project_name = project_name;
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
-    public String getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(String deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 
@@ -54,5 +61,13 @@ public class Project {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

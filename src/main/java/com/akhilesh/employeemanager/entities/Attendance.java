@@ -2,6 +2,7 @@ package com.akhilesh.employeemanager.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -10,7 +11,7 @@ public class Attendance {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String date;
+    private LocalDate date;
     private String status;
     @ManyToOne
     @JoinColumn(name = "employee_id")
@@ -24,7 +25,7 @@ public class Attendance {
         this.employee = employee;
     }
 
-    public Attendance(String date, String status, Employee employee) {
+    public Attendance(LocalDate date, String status, Employee employee) {
         this.date = date;
         this.status = status;
         this.employee = employee;
@@ -42,11 +43,11 @@ public class Attendance {
         this.id = id;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

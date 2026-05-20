@@ -24,6 +24,18 @@ public class EmployeeService {
     public Employee getEmployeeById(UUID id){
         return employeeRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee Not Found"));
     }
+    public List<Employee> getEmployeesByRole(String role){
+        return employeeRepo.findEmployeesByRole(role);
+    }
+    public List<Employee> getEmployeesByDepartment(String departmentName){
+        return employeeRepo.findEmployeesByDepartment(departmentName);
+    }
+    public Employee getEmployeeByEmail(String email){
+        return employeeRepo.findEmployeeByEmail(email);
+    }
+    public Long getEmployeeCountInDepartment(String departmentName){
+        return employeeRepo.countEmployeesInDepartment(departmentName);
+    }
     public Employee addEmployee(Employee employee){
         return employeeRepo.save(employee);
     }

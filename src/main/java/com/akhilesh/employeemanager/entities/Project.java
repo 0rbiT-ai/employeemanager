@@ -20,11 +20,10 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private List<Task> tasks;
 
-    public Project(String projectName, LocalDate deadline, String status, List<Task> tasks) {
+    public Project(String projectName, LocalDate deadline, String status) {
         this.projectName = projectName;
         this.deadline = deadline;
         this.status = status;
-        this.tasks = tasks;
     }
 
     public Project() {

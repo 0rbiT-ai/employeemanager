@@ -38,14 +38,12 @@ public class Employee {
     public Employee(){
     }
 
-    public Employee(String name, String email, String phone, String role, Department department, List<Task> tasks, List<Attendance> attendances){
+    public Employee(String name, String email, String phone, String role, Department department){
         this.name=name;
         this.email=email;
         this.phone=phone;
         this.role=role;
         this.department = department;
-        this.tasks = tasks;
-        this.attendances = attendances;
     }
 
 

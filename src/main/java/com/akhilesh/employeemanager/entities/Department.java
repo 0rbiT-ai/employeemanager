@@ -18,10 +18,9 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private List<Employee> employees;
 
-    public Department(String departmentName, String location, List<Employee> employees){
+    public Department(String departmentName, String location){
         this.departmentName=departmentName;
         this.location=location;
-        this.employees = employees;
     }
 
     public Department() {

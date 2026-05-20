@@ -1,0 +1,43 @@
+package com.akhilesh.employeemanager.services;
+
+import com.akhilesh.employeemanager.entities.Employee;
+import com.akhilesh.employeemanager.repository.EmployeeRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class EmployeeService {
+    private final EmployeeRepo employeeRepo;
+    @Autowired
+    public EmployeeService(EmployeeRepo employeeRepo) {
+        this.employeeRepo = employeeRepo;
+    }
+
+    public List<Employee> getAllEmployees(){
+        return employeeRepo.findAll();
+    }
+    public Employee getEmployeeById(UUID id){
+        return employeeRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee Not Found"));
+    }
+    public Employee addEmployee(Employee employee){
+        return employeeRepo.save(employee);
+    }
+    public Employee updateEmployeeById(UUID id, Employee updatedEmployee){
+        Employee employee = getEmployeeById(id);
+        employee.setName(updatedEmployee.getName());
+        employee.setEmail(updatedEmployee.getEmail());
+        employee.setPhone(updatedEmployee.getPhone());
+        employee.setRole(updatedEmployee.getRole());
+        employee.setDepartment(updatedEmployee.getDepartment());//dont update task and attendance since itll do automatically
+        return employeeRepo.save(employee); // check if user exists with getById then replace with getter and setter
+    }
+    public void deleteEmployeeById(UUID id){
+        Employee employee = getEmployeeById(id); // to prevent silent failure of .delete(id)
+        employeeRepo.delete(employee);// find and pass employee
+    }
+}

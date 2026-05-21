@@ -30,7 +30,9 @@ public class DepartmentService {
     public Department addDepartment(Department department){
         return departmentRepo.save(department);
     }
-
+    public List<Department> addAllDepartments(List<Department> departments){
+        return departmentRepo.saveAll(departments);
+    }
     public Department updateDepartmentById(UUID id, Department updatedDepartment){
         Department department = getDepartmentById(id);
         department.setDepartmentName(updatedDepartment.getDepartmentName());

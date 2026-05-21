@@ -30,6 +30,10 @@ public class DepartmentController {
     public ResponseEntity<Department> addDepartment(@RequestBody Department department){
         return new ResponseEntity<>(departmentService.addDepartment(department),HttpStatus.CREATED);
     }
+    @PostMapping("/all")
+    public ResponseEntity<List<Department>> addAllDepartments(@RequestBody List<Department> departments){
+        return new ResponseEntity<>(departmentService.addAllDepartments(departments),HttpStatus.CREATED);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Department> updateDepartmentById(@PathVariable UUID id, @RequestBody Department updatedDepartment){
         return new ResponseEntity<>(departmentService.updateDepartmentById(id,updatedDepartment),HttpStatus.OK);

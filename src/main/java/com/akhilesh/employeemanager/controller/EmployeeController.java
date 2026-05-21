@@ -59,6 +59,10 @@ public class EmployeeController {
     public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee){
         return new ResponseEntity<>(employeeService.addEmployee(employee),HttpStatus.CREATED);
     }
+    @PostMapping("/all")
+    public ResponseEntity<List<Employee>> addAllEmployees(@RequestBody List<Employee> employees){
+        return new ResponseEntity<>(employeeService.addAllEmployees(employees),HttpStatus.CREATED);
+    }
     @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployeeById(@PathVariable UUID id, @RequestBody Employee updatedEmployee){
         return new ResponseEntity<>(employeeService.updateEmployeeById(id,updatedEmployee),HttpStatus.OK);

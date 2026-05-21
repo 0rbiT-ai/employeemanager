@@ -45,6 +45,9 @@ public class EmployeeService {
     public Employee addEmployee(Employee employee){
         return employeeRepo.save(employee);
     }
+    public List<Employee> addAllEmployees(List<Employee> employees){
+        return employeeRepo.saveAll(employees);
+    }
     public Employee updateEmployeeById(UUID id, Employee updatedEmployee){
         Employee employee = getEmployeeById(id);
         employee.setName(updatedEmployee.getName());

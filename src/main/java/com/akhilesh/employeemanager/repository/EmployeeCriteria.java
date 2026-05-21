@@ -5,5 +5,5 @@ import com.akhilesh.employeemanager.entities.Employee;
 import java.util.List;
 
 public interface EmployeeCriteria {
-    List<Employee> findEmployeesByNameRoleDepartment(String name,String role,String departmentName); // criteria search
+    List<Employee> findEmployeesByNameRoleDepartment(String name,String role,String departmentName,String order, String dir); // criteria search
 }

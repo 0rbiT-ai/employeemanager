@@ -38,8 +38,8 @@ public class EmployeeService {
     public Long getEmployeeCountInDepartment(String departmentName){
         return employeeRepo.countEmployeesInDepartment(departmentName);
     }
-    public List<Employee> getEmployeeByNameRoleDepartment(String employeeName, String employeeRole, String employeeDepartment){
-        return employeeRepo.findEmployeesByNameRoleDepartment(employeeName,employeeRole,employeeDepartment); // Criteria Search
+    public List<Employee> getEmployeeByNameRoleDepartment(String employeeName, String employeeRole, String employeeDepartment, String order, String dir){
+        return employeeRepo.findEmployeesByNameRoleDepartment(employeeName,employeeRole,employeeDepartment,order,dir); // Criteria Search
     }
 
     public Employee addEmployee(Employee employee){

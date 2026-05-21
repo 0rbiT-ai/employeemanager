@@ -47,8 +47,10 @@ public class EmployeeController {
     @GetMapping("/search")
     public ResponseEntity<List<Employee>> getEmployeesByNameRoleDepartment(@RequestParam(required = false) String employeeName,
                                                                            @RequestParam(required = false) String employeeRole,
-                                                                           @RequestParam(required = false) String employeeDepartment){
-        return new ResponseEntity<>(employeeService.getEmployeeByNameRoleDepartment(employeeName,employeeRole,employeeDepartment),
+                                                                           @RequestParam(required = false) String employeeDepartment,
+                                                                           @RequestParam(required = false) String order,
+                                                                           @RequestParam(required = false) String dir){
+        return new ResponseEntity<>(employeeService.getEmployeeByNameRoleDepartment(employeeName,employeeRole,employeeDepartment,order,dir),
                 HttpStatus.OK);
     }
 

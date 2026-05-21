@@ -23,7 +23,7 @@ public class EmployeeCriteriaImpl implements EmployeeCriteria{
         CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
 
         Root<Employee> employee = cq.from(Employee.class);
-        Predicate employeeNamePredicate = cb.like(employee.get("name"),"%"+name+"%");
+        Predicate employeeNamePredicate = cb.like(cb.lower(employee.get("name")),"%"+name.toLowerCase()+"%");
         cq.where(employeeNamePredicate);
 
         TypedQuery<Employee> query = em.createQuery(cq);

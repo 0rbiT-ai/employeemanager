@@ -24,6 +24,8 @@ public class EmployeeService {
     public Employee getEmployeeById(UUID id){
         return employeeRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee Not Found"));
     }
+
+
     public List<Employee> getEmployeesByRole(String role){
         return employeeRepo.findEmployeesByRole(role);
     }
@@ -36,6 +38,10 @@ public class EmployeeService {
     public Long getEmployeeCountInDepartment(String departmentName){
         return employeeRepo.countEmployeesInDepartment(departmentName);
     }
+    public List<Employee> getEmployeeByName(String employeeName){
+        return employeeRepo.findEmployeesByName(employeeName); // Criteria Search
+    }
+
     public Employee addEmployee(Employee employee){
         return employeeRepo.save(employee);
     }

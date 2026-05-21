@@ -26,6 +26,8 @@ public class EmployeeController {
     public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id){
         return new ResponseEntity<>(employeeService.getEmployeeById(id),HttpStatus.OK);
     }
+
+
     @GetMapping("/role/{role}")
     public ResponseEntity<List<Employee>> getEmployeesByRole(@PathVariable String role){
         return new ResponseEntity<>(employeeService.getEmployeesByRole(role),HttpStatus.OK);
@@ -42,6 +44,12 @@ public class EmployeeController {
     public ResponseEntity<Long> getEmployeeCountInDepartment(@PathVariable String departmentName){
         return new ResponseEntity<>(employeeService.getEmployeeCountInDepartment(departmentName),HttpStatus.OK);
     }
+    @GetMapping("/name/{employeeName}")
+    public ResponseEntity<List<Employee>> getEmployeesByName(@PathVariable String employeeName){
+        return new ResponseEntity<>(employeeService.getEmployeeByName(employeeName),HttpStatus.OK);
+    }
+
+
     @PostMapping
     public ResponseEntity<Employee> addEmployee(@RequestBody Employee employee){
         return new ResponseEntity<>(employeeService.addEmployee(employee),HttpStatus.CREATED);

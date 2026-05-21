@@ -26,6 +26,15 @@ public class DepartmentController {
     public ResponseEntity<Department> getDepartmentById(@PathVariable UUID id){
         return new ResponseEntity<>(departmentService.getDepartmentById(id),HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Department>> getDepartmentsByNameLocation(@RequestParam(required = false) String departmentName,
+                                                                         @RequestParam(required = false) String location,
+                                                                         @RequestParam(required = false) String order,
+                                                                         @RequestParam(required = false) String dir){
+        return new ResponseEntity<>(departmentService.getDepartmentsByNameLocation(departmentName,location,order,dir),HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Department> addDepartment(@RequestBody Department department){
         return new ResponseEntity<>(departmentService.addDepartment(department),HttpStatus.CREATED);

@@ -27,6 +27,12 @@ public class DepartmentService {
                 orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Department Not Found"));
     }
 
+
+    public List<Department> getDepartmentsByNameLocation(String departmentName, String location, String order, String dir){
+        return departmentRepo.findDepartmentByNameLocation(departmentName,location,order,dir);
+    }
+
+
     public Department addDepartment(Department department){
         return departmentRepo.save(department);
     }

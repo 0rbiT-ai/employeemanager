@@ -44,9 +44,12 @@ public class EmployeeController {
     public ResponseEntity<Long> getEmployeeCountInDepartment(@PathVariable String departmentName){
         return new ResponseEntity<>(employeeService.getEmployeeCountInDepartment(departmentName),HttpStatus.OK);
     }
-    @GetMapping("/name/{employeeName}")
-    public ResponseEntity<List<Employee>> getEmployeesByName(@PathVariable String employeeName){
-        return new ResponseEntity<>(employeeService.getEmployeeByName(employeeName),HttpStatus.OK);
+    @GetMapping("/search")
+    public ResponseEntity<List<Employee>> getEmployeesByNameRoleDepartment(@RequestParam(required = false) String employeeName,
+                                                                           @RequestParam(required = false) String employeeRole,
+                                                                           @RequestParam(required = false) String employeeDepartment){
+        return new ResponseEntity<>(employeeService.getEmployeeByNameRoleDepartment(employeeName,employeeRole,employeeDepartment),
+                HttpStatus.OK);
     }
 
 

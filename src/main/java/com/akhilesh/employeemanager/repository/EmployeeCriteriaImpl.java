@@ -4,6 +4,9 @@ import com.akhilesh.employeemanager.entities.Employee;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -16,7 +19,8 @@ public class EmployeeCriteriaImpl implements EmployeeCriteria{
         this.em = em;
     }
     @Override
-    public List<Employee> findEmployeesByNameRoleDepartment(String name, String role, String departmentName, String order, String dir){
+    public Page<Employee> findEmployeesByNameRoleDepartment(String name, String role, String departmentName,
+                                                            String order, String dir, Pageable pageable){
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Employee> cq = cb.createQuery(Employee.class);
 
@@ -45,7 +49,15 @@ public class EmployeeCriteriaImpl implements EmployeeCriteria{
             }
         }
         cq.where(predicates.toArray(new Predicate[0])).orderBy(orders);
+        TypedQuery<Employee> tq = em.createQuery(cq);
+        tq.setFirstResult((int) pageable.getOffset());
+        tq.setMaxResults(pageable.getPageSize());
+        List<Employee> pageResult = tq.getResultList();
 
-        return em.createQuery(cq).getResultList();
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        countQuery.select(cb.count(countQuery.from(Employee.class)));
+        long totalCount = em.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(pageResult,pageable,totalCount);
     }
 }

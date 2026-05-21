@@ -3,6 +3,8 @@ package com.akhilesh.employeemanager.services;
 import com.akhilesh.employeemanager.entities.Department;
 import com.akhilesh.employeemanager.repository.DepartmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,8 +20,8 @@ public class DepartmentService {
         this.departmentRepo = departmentRepo;
     }
 
-    public List<Department> getAllDepartments(){
-        return departmentRepo.findAll();
+    public Page<Department> getAllDepartments(Pageable pageable){
+        return departmentRepo.findAll(pageable);
     }
 
     public Department getDepartmentById(UUID id){
@@ -28,8 +30,8 @@ public class DepartmentService {
     }
 
 
-    public List<Department> getDepartmentsByNameLocation(String departmentName, String location, String order, String dir){
-        return departmentRepo.findDepartmentByNameLocation(departmentName,location,order,dir);
+    public Page<Department> getDepartmentsByNameLocation(String departmentName, String location, String order, String dir,Pageable pageable){
+        return departmentRepo.findDepartmentByNameLocation(departmentName,location,order,dir,pageable);
     }
 
 

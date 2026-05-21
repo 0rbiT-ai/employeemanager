@@ -1,9 +1,9 @@
 package com.akhilesh.employeemanager.repository;
 
 import com.akhilesh.employeemanager.entities.Employee;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EmployeeCriteria {
-    List<Employee> findEmployeesByNameRoleDepartment(String name,String role,String departmentName,String order, String dir); // criteria search
+    Page<Employee> findEmployeesByNameRoleDepartment(String name, String role, String departmentName, String order, String dir, Pageable pageable); // criteria search
 }

@@ -2,10 +2,14 @@ package com.akhilesh.employeemanager.services;
 
 import com.akhilesh.employeemanager.entities.Employee;
 import com.akhilesh.employeemanager.repository.EmployeeRepo;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +22,8 @@ public class EmployeeService {
         this.employeeRepo = employeeRepo;
     }
 
-    public List<Employee> getAllEmployees(){
-        return employeeRepo.findAll();
+    public Page<Employee> getAllEmployees(Pageable pageable){
+        return employeeRepo.findAll(pageable);
     }
     public Employee getEmployeeById(UUID id){
         return employeeRepo.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee Not Found"));
@@ -38,8 +42,9 @@ public class EmployeeService {
     public Long getEmployeeCountInDepartment(String departmentName){
         return employeeRepo.countEmployeesInDepartment(departmentName);
     }
-    public List<Employee> getEmployeeByNameRoleDepartment(String employeeName, String employeeRole, String employeeDepartment, String order, String dir){
-        return employeeRepo.findEmployeesByNameRoleDepartment(employeeName,employeeRole,employeeDepartment,order,dir); // Criteria Search
+    public Page<Employee> getEmployeeByNameRoleDepartment(String employeeName, String employeeRole, String employeeDepartment,
+                                                          String order, String dir, Pageable pageable){
+        return employeeRepo.findEmployeesByNameRoleDepartment(employeeName,employeeRole,employeeDepartment,order,dir,pageable); // Criteria Search
     }
 
     public Employee addEmployee(Employee employee){

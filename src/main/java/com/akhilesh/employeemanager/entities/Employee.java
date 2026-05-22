@@ -1,13 +1,17 @@
 package com.akhilesh.employeemanager.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "employees")
-public class Employee {
+public class Employee implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -26,6 +30,9 @@ public class Employee {
     @JsonIgnore
     @OneToMany(mappedBy = "employee")
     private List<Attendance> attendances;
+    private String authRole;
+    @JsonIgnore
+    private String password;
 
     public Department getDepartment() {
         return department;
@@ -38,12 +45,14 @@ public class Employee {
     public Employee(){
     }
 
-    public Employee(String name, String email, String phone, String role, Department department){
+    public Employee(String name, String email, String phone, String role, Department department, String authRole, String password){
         this.name=name;
         this.email=email;
         this.phone=phone;
         this.role=role;
         this.department = department;
+        this.authRole = authRole;
+        this.password = password;
     }
 
 
@@ -112,5 +121,52 @@ public class Employee {
 
     public void setAttendances(List<Attendance> attendances) {
         this.attendances = attendances;
+    }
+
+    public String getAuthRole() {
+        return authRole;
+    }
+
+    public void setAuthRole(String authRole) {
+        this.authRole = authRole;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(authRole));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

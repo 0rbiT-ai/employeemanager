@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EmployeeRepoCustom {
     @Query("SELECT e FROM Employee e WHERE e.role=:role")
@@ -14,7 +15,7 @@ public interface EmployeeRepoCustom {
     public List<Employee> findEmployeesByDepartment(@Param("departmentName") String departmentName);
 
     @Query("SELECT e FROM Employee e WHERE e.email = :email")
-    public Employee findEmployeeByEmail(@Param("email") String email);
+    public Optional<Employee> findEmployeeByEmail(@Param("email") String email);
 
     @Query("SELECT COUNT(e) FROM Employee e WHERE e.department.departmentName = :departmentName")
     public Long countEmployeesInDepartment(@Param("departmentName") String departmentName);

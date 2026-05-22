@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -17,9 +18,12 @@ import java.util.UUID;
 @Service
 public class EmployeeService {
     private final EmployeeRepo employeeRepo;
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public EmployeeService(EmployeeRepo employeeRepo) {
+    public EmployeeService(EmployeeRepo employeeRepo, PasswordEncoder passwordEncoder) {
         this.employeeRepo = employeeRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Page<Employee> getAllEmployees(Pageable pageable){
@@ -37,7 +41,7 @@ public class EmployeeService {
         return employeeRepo.findEmployeesByDepartment(departmentName);
     }
     public Employee getEmployeeByEmail(String email){
-        return employeeRepo.findEmployeeByEmail(email);
+        return employeeRepo.findEmployeeByEmail(email).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Employee Not Found"));
     }
     public Long getEmployeeCountInDepartment(String departmentName){
         return employeeRepo.countEmployeesInDepartment(departmentName);
@@ -48,6 +52,7 @@ public class EmployeeService {
     }
 
     public Employee addEmployee(Employee employee){
+        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         return employeeRepo.save(employee);
     }
     public List<Employee> addAllEmployees(List<Employee> employees){

@@ -1,8 +1,10 @@
 package com.akhilesh.employeemanager.entities;
 
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +18,8 @@ public class Attendance {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
+    @OneToMany(mappedBy = "attendance", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<AttendanceSession> attendanceSessions;
 
     public Employee getEmployee() {
         return employee;
@@ -59,4 +63,12 @@ public class Attendance {
         this.status = status;
     }
 
+
+    public List<AttendanceSession> getAttendanceSessions() {
+        return attendanceSessions;
+    }
+
+    public void setAttendanceSessions(List<AttendanceSession> attendanceSessions) {
+        this.attendanceSessions = attendanceSessions;
+    }
 }

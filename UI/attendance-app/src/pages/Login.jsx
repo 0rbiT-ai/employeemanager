@@ -1,46 +1,55 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { login } from '../api'
+import {useMutation} from '@tanstack/react-query'
+import {loginUser} from '../api'
+import { useAuth } from '../context/Authcontext'
+
+
 
 function Login() {
+  const {login,logout} = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+  const mutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data) =>{
+      console.log(data.token)
+      console.log(data.role)
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    const user = await login(email, password)
-
-    // Save the user info so other pages can access it
-    localStorage.setItem('user', JSON.stringify(user))
-
-    if (user.role === 'admin') {
-      navigate('/admin')
-    } else {
-      navigate('/employee')
+      login(data)
+      console.log("logged in!")
+    },
+    onError: (error) => {
+      console.error('Login failed:', error.message)
     }
+  })
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    mutation.mutate({email, password})
   }
 
-  return (
-    <div>
-      <h1>Attendance App</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
-      </form>
-    </div>
+  return(
+    <form onSubmit={handleSubmit}>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button type="submit">Login</button>
+
+      <button type="button" onClick={logout}>Logout</button>
+    </form>
   )
+
+
+
 }
 
 export default Login

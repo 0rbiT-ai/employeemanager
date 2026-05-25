@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL 
 
 // ─── AUTH (mock until backend builds it) ─────────────────────
 export async function login(email, password) {
@@ -86,20 +86,30 @@ export async function checkOut(attendanceId) {
   return res.json()
 }
 export async function deleteEmployee(id) {
-  const res = await fetch(`http://localhost:8080/api/employees/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/employees/${id}`, {
     method: 'DELETE',
   })
   if (!res.ok) throw new Error('Failed to delete employee')
 }
 
 export async function deleteDepartment(id) {
-  const res = await fetch(`http://localhost:8080/api/departments/${id}`, {
+  const res = await fetch(`${BASE_URL}/api/departments/${id}`, {
     method: 'DELETE',
   })
   if (!res.ok) throw new Error('Failed to delete department')
 }
 export async function getAttendanceByEmployee(employeeId) {
-  const res = await fetch(`http://localhost:8080/api/attendance/employee/${employeeId}`)
+  const res = await fetch(`${BASE_URL}/api/attendance/employee/${employeeId}`)
   if (!res.ok) return []
+  return res.json()
+}
+
+export async function loginUser(loginData){
+  const res = await fetch(`${BASE_URL}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(loginData),
+  })
+  if (!res.ok) throw new Error('Login failed')
   return res.json()
 }

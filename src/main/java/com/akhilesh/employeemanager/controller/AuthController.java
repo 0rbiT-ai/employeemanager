@@ -2,6 +2,7 @@ package com.akhilesh.employeemanager.controller;
 
 import com.akhilesh.employeemanager.dto.AuthRequestDTO;
 import com.akhilesh.employeemanager.dto.AuthResponseDTO;
+import com.akhilesh.employeemanager.entities.Employee;
 import com.akhilesh.employeemanager.services.CustomUserDetailsService;
 import com.akhilesh.employeemanager.services.JwtService;
 import org.springframework.http.HttpHeaders;
@@ -35,8 +36,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO authRequestDTO){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(),authRequestDTO.getPassword()));
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(authRequestDTO.getEmail());
-        String token = jwtService.generateToken(userDetails);
-        return new ResponseEntity<>(new AuthResponseDTO(token), HttpStatus.OK);
+        Employee employee = (Employee) customUserDetailsService.loadUserByUsername(authRequestDTO.getEmail());
+        String token = jwtService.generateToken(employee);
+        return new ResponseEntity<>(new AuthResponseDTO(token,employee.getAuthRole()), HttpStatus.OK);
     }
 }

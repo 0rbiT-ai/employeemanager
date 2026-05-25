@@ -29,7 +29,7 @@ public class Employee implements UserDetails {
     @OneToMany(mappedBy = "employee")
     private List<Task> tasks;
     @JsonIgnore
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attendance> attendances;
     private String authRole;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

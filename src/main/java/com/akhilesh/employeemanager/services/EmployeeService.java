@@ -56,6 +56,11 @@ public class EmployeeService {
         return employeeRepo.save(employee);
     }
     public List<Employee> addAllEmployees(List<Employee> employees){
+        employees.forEach(employee -> {
+            if(employee.getPassword()!=null){
+                employee.setPassword(passwordEncoder.encode(employee.getPassword()));
+            }
+        });
         return employeeRepo.saveAll(employees);
     }
     public Employee updateEmployeeById(UUID id, Employee updatedEmployee){
@@ -65,6 +70,9 @@ public class EmployeeService {
         employee.setPhone(updatedEmployee.getPhone());
         employee.setRole(updatedEmployee.getRole());
         employee.setDepartment(updatedEmployee.getDepartment());//dont update task and attendance since itll do automatically
+        if(updatedEmployee.getPassword()!=null && !updatedEmployee.getPassword().isEmpty()){
+            employee.setPassword(passwordEncoder.encode(updatedEmployee.getPassword()));
+        }
         return employeeRepo.save(employee); // check if user exists with getById then replace with getter and setter
     }
     public void deleteEmployeeById(UUID id){

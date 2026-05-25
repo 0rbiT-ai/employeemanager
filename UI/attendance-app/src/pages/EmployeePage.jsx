@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Timer from '../components/Timer'
-import { checkIn, checkOut, getMyAttendanceToday, getAttendanceByEmployee } from '../api'
+import { checkIn, checkOut, getMyAttendanceToday } from '../api'
 
 function EmployeePage() {
   const [status, setStatus] = useState('idle')

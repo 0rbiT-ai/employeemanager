@@ -59,11 +59,11 @@ export async function getAllEmployees() {
   return res.json()
 }
 
-export async function createEmployee({ name, email, phone, role, departmentId }) {
+export async function createEmployee({ name, email, phone, role, password, departmentId }) {
   const res = await fetch(`${BASE_URL}/api/employees`, {
     method: 'POST',
     headers: authHeaders(),
-    body: JSON.stringify({ name, email, phone, role, department: { id: departmentId } })
+    body: JSON.stringify({ name, email, phone, role, password, authRole: 'EMPLOYEE', department: { id: departmentId } })
   })
   if (!res.ok) throw new Error('Failed to create employee')
   return res.json()

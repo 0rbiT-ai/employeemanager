@@ -512,7 +512,7 @@ export default function AdminPage() {
   return (
     <>
       <div className="topbar">
-        <span className="topbar-name">⚙️ Admin Dashboard</span>
+        <span className="topbar-name"> Admin Dashboard</span>
         <button className="topbar-logout" onClick={() => { localStorage.clear(); navigate('/login') }}>
           Logout
         </button>
@@ -520,9 +520,9 @@ export default function AdminPage() {
 
       <div className="admin-page">
         <div style={{ marginBottom: '28px' }}>
-          <Tab label="🏢 Departments" active={tab === 'departments'} onClick={() => setTab('departments')} />
-          <Tab label="👥 Employees"   active={tab === 'employees'}   onClick={() => setTab('employees')} />
-          <Tab label="🕐 Attendance"  active={tab === 'attendance'}  onClick={() => setTab('attendance')} />
+          <Tab label=" Departments" active={tab === 'departments'} onClick={() => setTab('departments')} />
+          <Tab label=" Employees"   active={tab === 'employees'}   onClick={() => setTab('employees')} />
+          <Tab label=" Attendance"  active={tab === 'attendance'}  onClick={() => setTab('attendance')} />
         </div>
 
         {tab === 'departments' && <DepartmentsTab />}

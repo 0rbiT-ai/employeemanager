@@ -1,5 +1,6 @@
 package com.akhilesh.employeemanager.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,7 +32,7 @@ public class Employee implements UserDetails {
     @OneToMany(mappedBy = "employee")
     private List<Attendance> attendances;
     private String authRole;
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     public Department getDepartment() {

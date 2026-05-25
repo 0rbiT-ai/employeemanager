@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Timer from '../components/Timer'
-import { checkIn, checkOut, getMyAttendanceToday, getAttendanceByEmployee } from '../api'
+import { checkIn, checkOut, getMyAttendanceToday, getAttendanceHistory } from '../api'
 
 function EmployeePage() {
   const [status, setStatus] = useState('idle')
@@ -10,11 +10,11 @@ function EmployeePage() {
   const [logs, setLogs] = useState([])
   const navigate = useNavigate()
 
-  const user = JSON.parse(localStorage.getItem('user'))
+  const name = localStorage.getItem('name')
 
   useEffect(() => {
     async function loadTodayStatus() {
-      const record = await getMyAttendanceToday(user?.id)
+      const record = await getMyAttendanceToday()
       if (record?.checkinTime && !record?.checkoutTime) {
         setCheckinTime(record.checkinTime)
         setStatus('checkedin')
@@ -27,7 +27,7 @@ function EmployeePage() {
 
     async function loadHistory() {
       try {
-        const data = await getAttendanceByEmployee(user?.id)
+        const data = await getAttendanceHistory()
         const arr = Array.isArray(data) ? data : (data?.content ?? [])
         setLogs(arr)
       } catch {
@@ -40,13 +40,13 @@ function EmployeePage() {
   }, [])
 
   async function handleCheckIn() {
-    const data = await checkIn(user?.id)
+    const data = await checkIn()
     setCheckinTime(data.checkinTime)
     setStatus('checkedin')
   }
 
   async function handleCheckOut() {
-    const data = await checkOut(user?.id)
+    const data = await checkOut()
     setCheckoutTime(data.checkoutTime)
     setStatus('checkedout')
   }
@@ -76,7 +76,7 @@ function EmployeePage() {
 
   return (
     <div>
-      <h1>Welcome, {user?.name}</h1>
+      <h1>Welcome, {name}</h1>
 
       {status === 'idle' && (
         <div>

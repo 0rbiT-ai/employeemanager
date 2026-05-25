@@ -133,7 +133,7 @@ public class Employee implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(authRole));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+authRole));
     }
 
     @Override

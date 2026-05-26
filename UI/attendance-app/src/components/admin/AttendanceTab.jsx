@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAllAttendanceLogs } from '../../api';
 import { Button } from '@/components/ui/button';
@@ -18,20 +18,54 @@ function formatTime(localTimeStr) {
 }
 
 function calculateTotalHours(sessions) {
-  if (!sessions || sessions.length === 0) return '0h 0m 0s';
-  let totalseconds = 0;
-  for (const session of sessions) {
-    if (session.checkIn && session.checkOut) {
-      const [inH, inM, inS=0] = session.checkIn.split(':').map(Number);
-      const [outH, outM, outS=0] = session.checkOut.split(':').map(Number);
-      const checkinseconds = (inH * 3600 + inM * 60 + inS) 
-      const checkoutseconds=(outH * 3600 + outM * 60 + outS)
-      totalseconds += checkoutseconds - checkinseconds;
-    }
+
+  if (!sessions || sessions.length === 0) {
+    return '0h 0m 0s';
   }
-  const hours = Math.floor(totalseconds / 3600);
-  const minutes = Math.floor((totalseconds % 3600) / 60);
-  const seconds = totalseconds % 60;
+
+  let totalSeconds = 0;
+
+  for (const session of sessions) {
+
+    if (!session.checkIn) continue;
+
+    const [inH, inM, inS = 0] =
+      session.checkIn.split(':').map(Number);
+
+    const inSeconds =
+      inH * 3600 + inM * 60 + inS;
+
+    let outSeconds = 0;
+
+    if (session.checkOut) {
+
+      const [outH, outM, outS = 0] =
+        session.checkOut.split(':').map(Number);
+
+      outSeconds =
+        outH * 3600 + outM * 60 + outS;
+
+    } else {
+
+      const now = new Date();
+
+      outSeconds =
+        now.getHours() * 3600 +
+        now.getMinutes() * 60 +
+        now.getSeconds();
+    }
+
+    totalSeconds += outSeconds - inSeconds;
+  }
+
+  const hours = Math.floor(totalSeconds / 3600);
+
+  const minutes = Math.floor(
+    (totalSeconds % 3600) / 60
+  );
+
+  const seconds = totalSeconds % 60;
+
   return `${hours}h ${minutes}m ${seconds}s`;
 }
 
@@ -43,6 +77,17 @@ function getStatus(sessions) {
 export default function AttendanceTab() {
   const [nameFilter, setNameFilter] = useState('');
   const [dateFilter, setDateFilter] = useState('');
+  const [, setTick] = useState(0);
+
+  useEffect(() => {
+
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+
+  }, []);
 
   const {
     data: attendanceLogs = [],

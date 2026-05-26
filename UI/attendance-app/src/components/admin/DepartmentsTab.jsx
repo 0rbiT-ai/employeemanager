@@ -3,6 +3,24 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllDepartments, createDepartment, deleteDepartment } from '../../api';
 import { Button } from '@/components/ui/button';
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+
+import {
   Card,
   CardContent,
   CardHeader,
@@ -118,6 +136,7 @@ export default function DepartmentsTab() {
             )}
 
             {!isLoading && !isError && (
+            <>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-zinc-300 text-sm">
                   <thead className="border-b border-zinc-800">
@@ -129,7 +148,7 @@ export default function DepartmentsTab() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-900">
-                    {departments.length === 0 ? (
+                    {departments.content.length === 0 ? (
                       <tr>
                         <td colSpan={4} className="py-6 px-4 text-center text-zinc-500">
                           No departments found.
@@ -160,6 +179,107 @@ export default function DepartmentsTab() {
                   </tbody>
                 </table>
               </div>
+              <div className="mt-6">
+                <div className="flex items-center justify-between gap-4 ">
+
+                  <div className="flex items-center gap-2">
+
+                    <label htmlFor="rows-per-page" className="text-sm text-zinc-400">
+                      Rows per page
+                    </label>
+
+                    <Select
+                      value={String(size)}
+                      onValueChange={(value) => {
+                        setSize(Number(value))
+                        setPage(0)
+                      }}
+                    >
+
+                      <SelectTrigger
+                        className="w-20 bg-zinc-900 border-zinc-700 text-white"
+                        id="rows-per-page"
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+
+                      <SelectContent>
+
+                        <SelectGroup>
+
+                          <SelectItem value="5">5</SelectItem>
+                          <SelectItem value="10">10</SelectItem>
+                          <SelectItem value="25">25</SelectItem>
+                          <SelectItem value="50">50</SelectItem>
+
+                        </SelectGroup>
+
+                      </SelectContent>
+
+                    </Select>
+
+                  </div>
+
+                  <div className="flex items-center gap-4">
+
+                    <span className="text-sm text-zinc-400">
+                      Page {page + 1} of {departments.totalPages || 1}
+                    </span>
+
+                    <Pagination className="mx-0 w-auto">
+
+                      <PaginationContent>
+
+                        <PaginationItem>
+
+                          <PaginationPrevious
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault()
+
+                              if (page > 0) {
+                                setPage(page - 1)
+                              }
+                            }}
+                            className={
+                              page === 0
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
+
+                        </PaginationItem>
+
+                        <PaginationItem>
+
+                          <PaginationNext
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault()
+
+                              if (page + 1 < departments.totalPages) {
+                                setPage(page + 1)
+                              }
+                            }}
+                            className={
+                              page + 1 >= departments.totalPages
+                                ? "pointer-events-none opacity-50"
+                                : ""
+                            }
+                          />
+
+                        </PaginationItem>
+
+                      </PaginationContent>
+
+                    </Pagination>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </>
             )}
           </CardContent>
         </Card>

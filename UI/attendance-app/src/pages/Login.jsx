@@ -20,11 +20,9 @@ function Login() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       // Decode JWT to get role
-      const payload = JSON.parse(atob(data.token.split('.')[1]))
-      const role = payload.role || data.role
-
+      const role = data.role
+      console.log(data.token) // Debug log
       login(data) // Save to context & localStorage
-
       if (role === 'ADMIN') {
         navigate('/admin')
       } else {

@@ -12,17 +12,13 @@ export function AuthProvider({ children }) {
     const [role, setrole] = useState(localStorage.getItem('role') || null)
     
     function login(data) {
-        const payload = JSON.parse(atob(data.token.split('.')[1]))
-        const role = payload.role
-        const name = payload.sub  // sub = email usually, check the console log
-
         settoken(data.token)
-        setrole(role)
+        setrole(data.role)
         localStorage.setItem('token', data.token)
-        localStorage.setItem('role', role)
-        localStorage.setItem('name', name)
+        localStorage.setItem('role', data.role)
+        localStorage.setItem('name', data.name)
     }
-
+    
     function logout(){
         settoken(null)
         setrole(null)

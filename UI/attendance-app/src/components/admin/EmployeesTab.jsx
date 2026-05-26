@@ -222,7 +222,7 @@ export default function EmployeesTab() {
                 <Input
                   id="empName"
                   type="text"
-                  placeholder="e.g. John Doe"
+                  placeholder="Enter Name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
@@ -235,7 +235,7 @@ export default function EmployeesTab() {
                 <Input
                   id="empEmail"
                   type="email"
-                  placeholder="e.g. john@company.com"
+                  placeholder="name@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
@@ -262,7 +262,7 @@ export default function EmployeesTab() {
                 <Input
                   id="empPhone"
                   type="text"
-                  placeholder="e.g. +1 234 567 890"
+                  placeholder="e.g. +91 XXXXX XXXXX"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"

@@ -96,7 +96,8 @@ export default function EmployeesTab() {
     return (
       emp.name?.toLowerCase().includes(term) ||
       emp.email?.toLowerCase().includes(term) ||
-      emp.role?.toLowerCase().includes(term)
+      emp.role?.toLowerCase().includes(term)||
+      emp.department?.departmentName?.toLowerCase().includes(term)
     );
   });
 
@@ -200,9 +201,9 @@ export default function EmployeesTab() {
 
       {/* Create Employee Form */}
       <div className="lg:col-span-1">
-        <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
-          <CardHeader>
-            <CardTitle className="text-white text-lg">Create Employee</CardTitle>
+        <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800 overflow-y-auto max-h-[80vh]">
+            <CardHeader>
+              <CardTitle className="text-white text-lg">Create Employee</CardTitle>
             <CardDescription className="text-zinc-400">
               Add a new employee to the organization
             </CardDescription>
@@ -213,94 +214,79 @@ export default function EmployeesTab() {
                 No departments exist yet. Please create a department first.
               </div>
             )}
-
             <form onSubmit={handleCreate} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="empName" className="text-zinc-300">
-                  Name
-                </Label>
-                <Input
-                  id="empName"
-                  type="text"
-                  placeholder="Enter Name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="empEmail" className="text-zinc-300">
-                  Email
-                </Label>
-                <Input
-                  id="empEmail"
-                  type="email"
-                  placeholder="name@company.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="empPassword" className="text-zinc-300">
-                  Password
-                </Label>
-                <Input
-                  id="empPassword"
-                  type="password"
-                  placeholder="Enter a strong password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="empPhone" className="text-zinc-300">
-                  Phone
-                </Label>
-                <Input
-                  id="empPhone"
-                  type="text"
-                  placeholder="e.g. +91 XXXXX XXXXX"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="empRole" className="text-zinc-300">
-                  Role
-                </Label>
-                <Input
-                  id="empRole"
-                  type="text"
-                  placeholder="e.g. Software Engineer"
-                  value={formData.role}
-                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-
-              
-
-              <div className="space-y-2">
-                <Label htmlFor="empDepartment" className="text-zinc-300">
-                  Department
-                </Label>
-                <select
-                  id="empDepartment"
-                  value={formData.departmentId}
-                  onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
-                  className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm focus:outline-none focus:border-zinc-500"
-                >
-                  <option value="">Select a department</option>
-                  {departments.map((dept) => (
-                    <option key={dept.id} value={dept.id}>
-                      {dept.departmentName}
-                    </option>
-                  ))}
-                </select>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="empName" className="text-zinc-300">Name</Label>
+                  <Input
+                    id="empName"
+                    type="text"
+                    placeholder="Enter Name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="empEmail" className="text-zinc-300">Email</Label>
+                  <Input
+                    id="empEmail"
+                    type="email"
+                    placeholder="name@company.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="empPassword" className="text-zinc-300">Password</Label>
+                  <Input
+                    id="empPassword"
+                    type="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="empPhone" className="text-zinc-300">Phone</Label>
+                  <Input
+                    id="empPhone"
+                    type="text"
+                    placeholder="+91 XXXXX XXXXX"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="empRole" className="text-zinc-300">Role</Label>
+                  <Input
+                    id="empRole"
+                    type="text"
+                    placeholder="e.g. Software Engineer"
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="empDepartment" className="text-zinc-300">Department</Label>
+                  <select
+                    id="empDepartment"
+                    value={formData.departmentId}
+                    onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
+                    className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm focus:outline-none focus:border-zinc-500"
+                  >
+                    <option value="">Select a department</option>
+                    {departments.map((dept) => (
+                      <option key={dept.id} value={dept.id}>
+                        {dept.departmentName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <Button
                 type="submit"

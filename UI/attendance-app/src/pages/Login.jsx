@@ -41,7 +41,7 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden relative">
+    <div className="min-h-screen w-screen bg-black flex items-center justify-center overflow-hidden relative px-4">
       {/* Background neon blobs */}
       <div className="absolute w-[500px] h-[500px] bg-blue-500/20 blur-3xl rounded-full top-[-100px] left-[-100px]" />
       <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px]" />
@@ -50,7 +50,7 @@ function Login() {
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="relative z-10 w-full max-w-md p-4"
+        className="relative z-10 w-full max-w-sm p-4"
       >
         <Card className="border-zinc-800 bg-black/50 backdrop-blur-xl text-white">
           <CardHeader className="space-y-1">

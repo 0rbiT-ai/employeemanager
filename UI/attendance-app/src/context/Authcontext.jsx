@@ -17,13 +17,15 @@ export function AuthProvider({ children }) {
         localStorage.setItem('token', data.token)
         localStorage.setItem('role', data.role)
         localStorage.setItem('name', data.name)
+        localStorage.setItem('refreshToken', data.refreshToken)
     }
-    
+
     function logout(){
         settoken(null)
         setrole(null)
         localStorage.removeItem('token')
         localStorage.removeItem('role')
+        localStorage.removeItem('refreshToken')
     }
     
     return (

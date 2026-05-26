@@ -16,7 +16,9 @@ export default function DepartmentsTab() {
   const queryClient = useQueryClient();
   const [formData, setFormData] = useState({ departmentName: '', location: '' });
   const [message, setMessage] = useState({ type: '', text: '' });
-
+  const [Employee, setEmployee] = useState(0);
+  const [isdeleteopen, setIsDeleteOpen] = useState(false);
+  const [iscreateopen, setIsCreateOpen] = useState(false);
   const {
     data: departments = [],
     isLoading,
@@ -30,6 +32,7 @@ export default function DepartmentsTab() {
     mutationFn: ({ departmentName, location }) => createDepartment(departmentName, location),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['departments'] });
+      setIsCreateOpen(false);
       setFormData({ departmentName: '', location: '' });
       setMessage({ type: 'success', text: 'Department created successfully!' });
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
@@ -66,14 +69,23 @@ export default function DepartmentsTab() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this department?')) {
-      deleteMutation.mutate(id);
-    }
+    setEmployee(id);
+    setIsDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    deleteMutation.mutate(Employee);
+    setIsDeleteOpen(false);
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Department Table */}
+      <button onClick={() => setIsCreateOpen(true)}
+          className="bg-zinc-900 text-zinc-400 hover:text-white border border-radius-70 px-1 py-1 rounded-lg mb-4 w-full">
+          Create Department
+        </button>
+      
       <div className="lg:col-span-2">
         <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
           <CardHeader>
@@ -151,58 +163,113 @@ export default function DepartmentsTab() {
         </Card>
       </div>
 
-      {/* Create Department Form */}
-      <div className="lg:col-span-1">
-        <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
-          <CardHeader>
-            <CardTitle className="text-white text-lg">Create Department</CardTitle>
-            <CardDescription className="text-zinc-400">
-              Add a new department to the organization
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleCreate} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="departmentName" className="text-zinc-300">
-                  Department Name
-                </Label>
-                <Input
-                  id="departmentName"
-                  type="text"
-                  placeholder="e.g. Engineering"
-                  value={formData.departmentName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, departmentName: e.target.value })
-                  }
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="location" className="text-zinc-300">
-                  Location
-                </Label>
-                <Input
-                  id="location"
-                  type="text"
-                  placeholder="e.g. Building A, Floor 3"
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-white text-black hover:bg-zinc-200 transition-colors"
-                disabled={createMutation.isPending}
+      {iscreateopen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+    <div className="bg-zinc-900 p-6 rounded-2xl w-full max-w-md border border-zinc-800">
+
+      <h2 className="text-white text-2xl font-bold mb-2">
+        Create Department
+      </h2>
+
+      <p className="text-zinc-400 mb-6">
+        Add a new department to the organization
+      </p>
+
+      <form onSubmit={handleCreate} className="space-y-4">
+
+        <div className="space-y-2">
+          <Label htmlFor="departmentName" className="text-zinc-300">
+            Department Name
+          </Label>
+
+          <Input
+            id="departmentName"
+            type="text"
+            placeholder="e.g. Engineering"
+            value={formData.departmentName}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                departmentName: e.target.value,
+              })
+            }
+            className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="location" className="text-zinc-300">
+            Location
+          </Label>
+
+          <Input
+            id="location"
+            type="text"
+            placeholder="e.g. Building A"
+            value={formData.location}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                location: e.target.value,
+              })
+            }
+            className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+          />
+        </div>
+
+        <div className="flex justify-end gap-3 pt-4">
+
+          <button
+            type="button"
+            onClick={() => setIsCreateOpen(false)}
+            className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+          >
+            Cancel
+          </button>
+
+          <Button
+            type="submit"
+            className="bg-white text-black hover:bg-zinc-200"
+            disabled={createMutation.isPending}
+          >
+            {createMutation.isPending
+              ? 'Creating...'
+              : 'Create Department'}
+          </Button>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+)}
+      {isdeleteopen && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black/50'>
+          <div className="bg-zinc-900 p-6 rounded-xl w-96">
+            <h2 className="!text-white text-xl font-bold mb-4">
+              Delete Department
+            </h2>
+            <p className="text-zinc-400 mb-6">
+              Are you sure you want to delete this department? This action cannot be undone.
+            </p>
+            <div className="flex justify-between gap-4 mt-6">
+              <button
+              onClick={() => setIsDeleteOpen(false)}
+              className="px-4 py-2 rounded-lg bg-zinc-700"
               >
-                {createMutation.isPending ? 'Creating...' : 'Create Department'}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+                Cancel
+              </button>
+              <button
+              onClick={confirmDelete}
+              className="px-4 py-2 rounded-lg bg-red-500 text-white"
+              >
+                Delete
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      )}
     </div>
   );
 }

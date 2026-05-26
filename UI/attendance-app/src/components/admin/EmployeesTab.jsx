@@ -24,7 +24,9 @@ export default function EmployeesTab() {
     password: '',
     departmentId: '',
   });
-
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isdeleteopen, setIsDeleteOpen] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const {
     data: employees = [],
     isLoading,
@@ -86,8 +88,15 @@ export default function EmployeesTab() {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this employee?')) {
-      deleteMutation.mutate(id);
+    setSelectedEmployeeId(id);
+    setIsDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedEmployeeId !== null) {
+      deleteMutation.mutate(selectedEmployeeId);
+      setIsDeleteOpen(false);
+      setSelectedEmployeeId(null);
     }
   };
 
@@ -103,6 +112,10 @@ export default function EmployeesTab() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <button onClick={() => setIsCreateOpen(true)}
+          className="bg-zinc-900 text-zinc-400 hover:text-white border border-radius-70 px-1 py-1 rounded-lg mb-4 w-full">
+          Create Employee
+        </button>
       {/* Employee Table */}
       <div className="lg:col-span-2">
         <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
@@ -199,106 +212,199 @@ export default function EmployeesTab() {
         </Card>
       </div>
 
-      {/* Create Employee Form */}
-      <div className="lg:col-span-1">
-        <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800 overflow-y-auto max-h-[80vh]">
-            <CardHeader>
-              <CardTitle className="text-white text-lg">Create Employee</CardTitle>
-            <CardDescription className="text-zinc-400">
-              Add a new employee to the organization
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {departments.length === 0 && (
-              <div className="mb-4 px-4 py-2 rounded-lg text-sm bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                No departments exist yet. Please create a department first.
+      
+      
+      {isdeleteopen && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black/50'>
+          <div className="bg-zinc-900 p-6 rounded-xl w-96">
+            <h2 className="!text-white text-xl font-bold mb-4">
+              Delete Employee
+            </h2>
+            <p className="text-zinc-400 mb-6">
+              Are you sure you want to delete this employee? This action cannot be undone.
+            </p>
+            <div className="flex justify-between gap-4 mt-6">
+              <button
+              onClick={() => setIsDeleteOpen(false)}
+              className="px-4 py-2 rounded-lg bg-zinc-700"
+              >
+                Cancel
+              </button>
+              <button
+              onClick={confirmDelete}
+              className="px-4 py-2 rounded-lg bg-red-500 text-white"
+              >
+                Delete
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      )}
+      {isCreateOpen && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+
+    <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
+
+      <div className="flex items-center justify-between mb-6">
+
+        <div>
+          <h2 className="text-white text-2xl font-bold">
+            Create Employee
+          </h2>
+
+          <h3 className="text-zinc-400 text-sm mt-1 ">
+            Add a new employee to the organization
+          </h3>
+        </div>
+
+        <button
+          onClick={() => setIsCreateOpen(false)}
+          className="text-zinc-400 hover:text-white text-xl"
+        >
+          ✕
+        </button>
+
+      </div>
+
+          {departments.length === 0 && (
+            <div className="mb-4 px-4 py-2 rounded-lg text-sm bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              No departments exist yet. Please create a department first.
+            </div>
+          )}
+
+          <form
+            onSubmit={(e) => {
+              handleCreate(e);
+              setIsCreateOpen(false);
+            }}
+            className="space-y-4"
+          >
+
+            <div className="grid grid-cols-2 gap-4">
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Name</Label>
+
+                <Input
+                  type="text"
+                  placeholder="Enter Name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
               </div>
-            )}
-            <form onSubmit={handleCreate} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="empName" className="text-zinc-300">Name</Label>
-                  <Input
-                    id="empName"
-                    type="text"
-                    placeholder="Enter Name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="empEmail" className="text-zinc-300">Email</Label>
-                  <Input
-                    id="empEmail"
-                    type="email"
-                    placeholder="name@company.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="empPassword" className="text-zinc-300">Password</Label>
-                  <Input
-                    id="empPassword"
-                    type="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="empPhone" className="text-zinc-300">Phone</Label>
-                  <Input
-                    id="empPhone"
-                    type="text"
-                    placeholder="+91 XXXXX XXXXX"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="empRole" className="text-zinc-300">Role</Label>
-                  <Input
-                    id="empRole"
-                    type="text"
-                    placeholder="e.g. Software Engineer"
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="empDepartment" className="text-zinc-300">Department</Label>
-                  <select
-                    id="empDepartment"
-                    value={formData.departmentId}
-                    onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
-                    className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm focus:outline-none focus:border-zinc-500"
-                  >
-                    <option value="">Select a department</option>
-                    {departments.map((dept) => (
-                      <option key={dept.id} value={dept.id}>
-                        {dept.departmentName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Email</Label>
+
+                <Input
+                  type="email"
+                  placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
               </div>
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Password</Label>
+
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Phone</Label>
+
+                <Input
+                  type="text"
+                  placeholder="+91 XXXXX XXXXX"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Role</Label>
+
+                <Input
+                  type="text"
+                  placeholder="Software Engineer"
+                  value={formData.role}
+                  onChange={(e) =>
+                    setFormData({ ...formData, role: e.target.value })
+                  }
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Department</Label>
+
+                <select
+                  value={formData.departmentId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      departmentId: e.target.value,
+                    })
+                  }
+                  className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm"
+                >
+                  <option value="">Select a department</option>
+
+                  {departments.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.departmentName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+            </div>
+
+            <div className="flex justify-end gap-4 pt-4">
+
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsCreateOpen(false)}
+              >
+                Cancel
+              </Button>
+
               <Button
                 type="submit"
-                className="w-full bg-white text-black hover:bg-zinc-200 transition-colors"
-                disabled={createMutation.isPending || departments.length === 0}
+                className="bg-white text-black hover:bg-zinc-200"
               >
-                {createMutation.isPending ? 'Creating...' : 'Create Employee'}
+                {createMutation.isPending
+                  ? 'Creating...'
+                  : 'Create Employee'}
               </Button>
-            </form>
-          </CardContent>
-        </Card>
+
+            </div>
+
+          </form>
+
+        </div>
+
       </div>
+    )}
     </div>
   );
 }

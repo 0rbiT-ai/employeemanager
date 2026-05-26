@@ -2,6 +2,7 @@ package com.akhilesh.employeemanager.controller;
 
 import com.akhilesh.employeemanager.entities.Employee;
 import com.akhilesh.employeemanager.services.EmployeeService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,10 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<Employee>> getAllEmployees(@RequestParam(defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "5") int size){
         Pageable pageable = PageRequest.of(page,size);
-        return new ResponseEntity<>(employeeService.getAllEmployees(pageable).getContent(),HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getAllEmployees(pageable),HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id){
@@ -49,7 +50,7 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.getEmployeeCountInDepartment(departmentName),HttpStatus.OK);
     }
     @GetMapping("/search")
-    public ResponseEntity<List<Employee>> getEmployeesByNameRoleDepartment(@RequestParam(required = false) String employeeName,
+    public ResponseEntity<Page<Employee>> getEmployeesByNameRoleDepartment(@RequestParam(required = false) String employeeName,
                                                                            @RequestParam(required = false) String employeeRole,
                                                                            @RequestParam(required = false) String employeeDepartment,
                                                                            @RequestParam(required = false) String order,
@@ -57,7 +58,7 @@ public class EmployeeController {
                                                                            @RequestParam(defaultValue = "0") int page,
                                                                            @RequestParam(defaultValue = "5") int size){
         Pageable pageable = PageRequest.of(page,size);
-        return new ResponseEntity<>(employeeService.getEmployeeByNameRoleDepartment(employeeName,employeeRole,employeeDepartment,order,dir,pageable).getContent(),
+        return new ResponseEntity<>(employeeService.getEmployeeByNameRoleDepartment(employeeName,employeeRole,employeeDepartment,order,dir,pageable),
                 HttpStatus.OK);
     }
 

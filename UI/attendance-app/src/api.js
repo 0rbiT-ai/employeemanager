@@ -68,9 +68,16 @@ export async function loginUser(loginData) {
 }
 
 // ─── DEPARTMENTS ──────────────────────────────────────────────
-export async function getAllDepartments() {
-  const res = await fetchWithAuth(`${BASE_URL}/api/departments`)
-  if (!res.ok) throw new Error('Failed to fetch departments')
+export async function getAllDepartments(page = 0, size = 5) {
+
+  const res = await fetchWithAuth(
+    `${BASE_URL}/api/departments?page=${page}&size=${size}`
+  )
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch departments')
+  }
+
   return res.json()
 }
 
@@ -91,7 +98,7 @@ export async function deleteDepartment(id) {
 }
 
 // ─── EMPLOYEES ────────────────────────────────────────────────
-export async function getAllEmployees() {
+export async function getAllEmployees(page = 0, size = 5) {
   const res = await fetchWithAuth(`${BASE_URL}/api/employees`)
   if (!res.ok) throw new Error('Failed to fetch employees')
   return res.json()

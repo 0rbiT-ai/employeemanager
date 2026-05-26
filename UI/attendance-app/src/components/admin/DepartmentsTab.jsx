@@ -19,13 +19,15 @@ export default function DepartmentsTab() {
   const [Employee, setEmployee] = useState(0);
   const [isdeleteopen, setIsDeleteOpen] = useState(false);
   const [iscreateopen, setIsCreateOpen] = useState(false);
+  const [page,setPage] = useState(0);
+  const [size,setSize] = useState(5);
   const {
-    data: departments = [],
+    data: departments = { content: [] },
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['departments'],
-    queryFn: getAllDepartments,
+    queryKey: ['departments',page,size],
+    queryFn: () => getAllDepartments(page,size),
   });
 
   const createMutation = useMutation({
@@ -134,7 +136,7 @@ export default function DepartmentsTab() {
                         </td>
                       </tr>
                     ) : (
-                      departments.map((dept, index) => (
+                      departments.content.map((dept, index) => (
                         <tr key={dept.id} className="hover:bg-zinc-900/50 transition-colors">
                           <td className="py-3 px-4">{index + 1}</td>
                           <td className="py-3 px-4 font-medium text-white">

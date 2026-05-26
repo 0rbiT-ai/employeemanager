@@ -28,7 +28,7 @@ export default function EmployeesTab() {
   const [isdeleteopen, setIsDeleteOpen] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const {
-    data: employees = [],
+    data: employees = { content: [] },
     isLoading,
     isError,
   } = useQuery({
@@ -100,7 +100,7 @@ export default function EmployeesTab() {
     }
   };
 
-  const filteredEmployees = employees.filter((emp) => {
+  const filteredEmployees = employees.content.filter((emp) => {
     const term = searchTerm.toLowerCase();
     return (
       emp.name?.toLowerCase().includes(term) ||

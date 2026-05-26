@@ -99,7 +99,7 @@ export async function deleteDepartment(id) {
 
 // ─── EMPLOYEES ────────────────────────────────────────────────
 export async function getAllEmployees(page = 0, size = 5) {
-  const res = await fetchWithAuth(`${BASE_URL}/api/employees`)
+  const res = await fetchWithAuth(`${BASE_URL}/api/employees?page=${page}&size=${size}`)
   if (!res.ok) throw new Error('Failed to fetch employees')
   return res.json()
 }

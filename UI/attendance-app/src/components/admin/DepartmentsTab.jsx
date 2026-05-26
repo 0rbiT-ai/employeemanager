@@ -157,7 +157,7 @@ export default function DepartmentsTab() {
                     ) : (
                       departments.content.map((dept, index) => (
                         <tr key={dept.id} className="hover:bg-zinc-900/50 transition-colors">
-                          <td className="py-3 px-4">{index + 1}</td>
+                          <td className="py-3 px-4">{page* size + index + 1}</td>
                           <td className="py-3 px-4 font-medium text-white">
                             {dept.departmentName}
                           </td>

@@ -11,11 +11,29 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function EmployeesTab() {
   const queryClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
   const [message, setMessage] = useState({ type: '', text: '' });
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(5);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,13 +50,13 @@ export default function EmployeesTab() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['employees'],
-    queryFn: getAllEmployees,
+    queryKey: ['employees',page,size],
+    queryFn: () => getAllEmployees(page, size),
   });
 
-  const { data: departments = [] } = useQuery({
-    queryKey: ['departments'],
-    queryFn: getAllDepartments,
+  const { data: departments = {content: [] } } = useQuery({
+    queryKey: ['departments',page,size],
+    queryFn: () => getAllDepartments(0,100),
   });
 
   const createMutation = useMutation({
@@ -158,55 +176,161 @@ export default function EmployeesTab() {
             )}
 
             {!isLoading && !isError && (
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-zinc-300 text-sm">
-                  <thead className="border-b border-zinc-800">
-                    <tr>
-                      <th className="py-3 px-4 font-medium text-zinc-400">#</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Name</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Email</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Role</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Department</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-zinc-900">
-                    {filteredEmployees.length === 0 ? (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-zinc-300 text-sm">
+                    <thead className="border-b border-zinc-800">
                       <tr>
-                        <td colSpan={6} className="py-6 px-4 text-center text-zinc-500">
-                          {searchTerm ? 'No employees match your search.' : 'No employees found.'}
-                        </td>
+                        <th className="py-3 px-4 font-medium text-zinc-400">#</th>
+                        <th className="py-3 px-4 font-medium text-zinc-400">Name</th>
+                        <th className="py-3 px-4 font-medium text-zinc-400">Email</th>
+                        <th className="py-3 px-4 font-medium text-zinc-400">Role</th>
+                        <th className="py-3 px-4 font-medium text-zinc-400">Department</th>
+                        <th className="py-3 px-4 font-medium text-zinc-400">Actions</th>
                       </tr>
-                    ) : (
-                      filteredEmployees.map((emp, index) => {
-                        if(emp.role !== 'Administrator'){
-                          return(<tr key={emp.id} className="hover:bg-zinc-900/50 transition-colors">
-                            <td className="py-3 px-4">{index + 1}</td>
-                            <td className="py-3 px-4 font-medium text-white">{emp.name}</td>
-                            <td className="py-3 px-4">{emp.email}</td>
-                            <td className="py-3 px-4">
-                              <span className="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-300">
-                                {emp.role}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4">{emp.department?.departmentName || '—'}</td>
-                            <td className="py-3 px-4">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                onClick={() => handleDelete(emp.id)}
-                                disabled={deleteMutation.isPending}
-                              >
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>)}
-                      })
-                    )}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-900">
+                      {filteredEmployees.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="py-6 px-4 text-center text-zinc-500">
+                            {searchTerm ? 'No employees match your search.' : 'No employees found.'}
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredEmployees.map((emp, index) => {
+                          if(emp.role !== 'Administrator'){
+                            return(<tr key={emp.id} className="hover:bg-zinc-900/50 transition-colors">
+                              <td className="py-3 px-4">{page * size + index }</td>
+                              <td className="py-3 px-4 font-medium text-white">{emp.name}</td>
+                              <td className="py-3 px-4">{emp.email}</td>
+                              <td className="py-3 px-4">
+                                <span className="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-300">
+                                  {emp.role}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4">{emp.department?.departmentName || '—'}</td>
+                              <td className="py-3 px-4">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                  onClick={() => handleDelete(emp.id)}
+                                  disabled={deleteMutation.isPending}
+                                >
+                                  Delete
+                                </Button>
+                              </td>
+                            </tr>)}
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-6">
+
+              <div className="flex items-center justify-between gap-4">
+
+                <div className="flex items-center gap-2">
+
+                  <label
+                    htmlFor="rows-per-page"
+                    className="text-sm text-zinc-400"
+                  >
+                    Rows per page
+                  </label>
+
+                  <Select
+                    value={String(size)}
+                    onValueChange={(value) => {
+                      setSize(Number(value))
+                      setPage(0)
+                    }}
+                  >
+
+                    <SelectTrigger
+                      className="w-20 bg-zinc-900 border-zinc-700 text-white"
+                      id="rows-per-page"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+
+                    <SelectContent>
+
+                      <SelectGroup>
+
+                        <SelectItem value="5">5</SelectItem>
+                        <SelectItem value="10">10</SelectItem>
+                        <SelectItem value="25">25</SelectItem>
+                        <SelectItem value="50">50</SelectItem>
+
+                      </SelectGroup>
+
+                    </SelectContent>
+
+                  </Select>
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <span className="text-sm text-zinc-400">
+                    Page {page + 1} of {employees.totalPages || 1}
+                  </span>
+
+                  <Pagination className="mx-0 w-auto">
+
+                    <PaginationContent>
+
+                      <PaginationItem>
+
+                        <PaginationPrevious
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault()
+
+                            if (page > 0) {
+                              setPage(page - 1)
+                            }
+                          }}
+                          className={
+                            page === 0
+                              ? "pointer-events-none opacity-50"
+                              : ""
+                          }
+                        />
+
+                      </PaginationItem>
+
+                      <PaginationItem>
+
+                        <PaginationNext
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault()
+
+                            if (page + 1 < employees.totalPages) {
+                              setPage(page + 1)
+                            }
+                          }}
+                          className={
+                            page + 1 >= employees.totalPages
+                              ? "pointer-events-none opacity-50"
+                              : ""
+                          }
+                        />
+
+                      </PaginationItem>
+
+                    </PaginationContent>
+
+                  </Pagination>
+
+                </div>
+
               </div>
+
+            </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -267,7 +391,7 @@ export default function EmployeesTab() {
 
       </div>
 
-          {departments.length === 0 && (
+          {departments.content.length === 0 && (
             <div className="mb-4 px-4 py-2 rounded-lg text-sm bg-amber-500/10 text-amber-400 border border-amber-500/20">
               No departments exist yet. Please create a department first.
             </div>
@@ -368,7 +492,7 @@ export default function EmployeesTab() {
                 >
                   <option value="">Select a department</option>
 
-                  {departments.map((dept) => (
+                  {departments.content.map((dept) => (
                     <option key={dept.id} value={dept.id}>
                       {dept.departmentName}
                     </option>

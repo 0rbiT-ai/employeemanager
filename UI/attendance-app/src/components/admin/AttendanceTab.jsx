@@ -18,17 +18,21 @@ function formatTime(localTimeStr) {
 }
 
 function calculateTotalHours(sessions) {
-  if (!sessions || sessions.length === 0) return '0.00';
-  let totalMinutes = 0;
+  if (!sessions || sessions.length === 0) return '0h 0m 0s';
+  let totalseconds = 0;
   for (const session of sessions) {
     if (session.checkIn && session.checkOut) {
-      const [inH, inM] = session.checkIn.split(':').map(Number);
-      const [outH, outM] = session.checkOut.split(':').map(Number);
-      totalMinutes += (outH * 60 + outM) - (inH * 60 + inM);
+      const [inH, inM, inS=0] = session.checkIn.split(':').map(Number);
+      const [outH, outM, outS=0] = session.checkOut.split(':').map(Number);
+      const checkinseconds = (inH * 3600 + inM * 60 + inS) 
+      const checkoutseconds=(outH * 3600 + outM * 60 + outS)
+      totalseconds += checkoutseconds - checkinseconds;
     }
   }
-  const hours = totalMinutes / 60;
-  return hours.toFixed(2);
+  const hours = Math.floor(totalseconds / 3600);
+  const minutes = Math.floor((totalseconds % 3600) / 60);
+  const seconds = totalseconds % 60;
+  return `${hours}h ${minutes}m ${seconds}s`;
 }
 
 function getStatus(sessions) {
@@ -117,7 +121,7 @@ export default function AttendanceTab() {
                   <th className="py-3 px-4 font-medium text-zinc-400">Employee</th>
                   <th className="py-3 px-4 font-medium text-zinc-400">Date</th>
                   <th className="py-3 px-4 font-medium text-zinc-400">Sessions</th>
-                  <th className="py-3 px-4 font-medium text-zinc-400">Total Hours</th>
+                  <th className="py-3 px-4 font-medium text-zinc-400">Total Working Time</th>
                   <th className="py-3 px-4 font-medium text-zinc-400">Status</th>
                 </tr>
               </thead>
@@ -160,7 +164,7 @@ export default function AttendanceTab() {
                           )}
                         </td>
                         <td className="py-3 px-4 font-mono">
-                          {calculateTotalHours(sessions)}h
+                          {calculateTotalHours(sessions)}
                         </td>
                         <td className="py-3 px-4">
                           {status === 'completed' ? (

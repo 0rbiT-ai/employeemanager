@@ -199,7 +199,7 @@ const {
                       <th className="py-3 px-4 font-medium text-zinc-400">#</th>
                       <th className="py-3 px-4 font-medium text-zinc-400">Name</th>
                       <th className="py-3 px-4 font-medium text-zinc-400">Location</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Actions</th>
+                      <th className="py-3 px-4 font-medium text-zinc-400 text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-900">
@@ -218,23 +218,25 @@ const {
                           </td>
                           <td className="py-3 px-4">{dept.location}</td>
                           <td className="py-3 px-4">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
-                              onClick={() => handleEdit(dept)}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                              onClick={() => handleDelete(dept.id)}
-                              disabled={deleteMutation.isPending}
-                            >
-                              Delete
-                            </Button>
+                            <div className="flex items-center justify-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                                onClick={() => handleEdit(dept)}
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                onClick={() => handleDelete(dept.id)}
+                                disabled={deleteMutation.isPending}
+                              >
+                                Delete
+                              </Button>
+                            </div>
                           </td>
                         </tr>
                       ))
@@ -451,7 +453,6 @@ const {
                 Delete
               </button>
             </div>
-            
           </div>
         </div>
       )}

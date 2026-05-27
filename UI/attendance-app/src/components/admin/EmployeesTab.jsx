@@ -231,7 +231,7 @@ export default function EmployeesTab() {
                         <th className="py-3 px-4 font-medium text-zinc-400">Email</th>
                         <th className="py-3 px-4 font-medium text-zinc-400">Role</th>
                         <th className="py-3 px-4 font-medium text-zinc-400">Department</th>
-                        <th className="py-3 px-4 font-medium text-zinc-400">Actions</th>
+                        <th className="py-3 px-4 font-medium text-zinc-400 text-center">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-900">
@@ -255,23 +255,25 @@ export default function EmployeesTab() {
                               </td>
                               <td className="py-3 px-4">{emp.department?.departmentName || '—'}</td>
                               <td className="py-3 px-4">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
-                                  onClick={() => handleEdit(emp)}
-                                >
-                                  Edit
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                  onClick={() => handleDelete(emp.id)}
-                                  disabled={deleteMutation.isPending}
-                                >
-                                  Delete
-                                </Button>
+                                <div className="flex items-center justify-center gap-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                                    onClick={() => handleEdit(dept)}
+                                  >
+                                    Edit
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                    onClick={() => handleDelete(dept.id)}
+                                    disabled={deleteMutation.isPending}
+                                  >
+                                    Delete
+                                  </Button>
+                                </div>
                               </td>
                             </tr>)}
                         })

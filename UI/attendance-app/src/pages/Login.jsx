@@ -41,10 +41,10 @@ function Login() {
   }
 
   return (
-    <div className="min-h-screen w-screen bg-black flex items-center justify-center overflow-hidden relative px-4">
+    <div className="min-h-screen w-screen bg-background flex items-center justify-center overflow-hidden relative px-4">
       {/* Background neon blobs */}
-      <div className="absolute w-[500px] h-[500px] bg-blue-500/20 blur-3xl rounded-full top-[-100px] left-[-100px]" />
-      <div className="absolute w-[400px] h-[400px] bg-purple-500/20 blur-3xl rounded-full bottom-[-100px] right-[-100px]" />
+      <div className="absolute w-[500px] h-[500px] bg-primary/10 blur-3xl rounded-full top-[-100px] left-[-100px]" />
+      <div className="absolute w-[400px] h-[400px] bg-primary/10 blur-3xl rounded-full bottom-[-100px] right-[-100px]" />
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -52,17 +52,17 @@ function Login() {
         transition={{ duration: 0.6 }}
         className="relative z-10 w-full max-w-sm p-4"
       >
-        <Card className="border-zinc-800 bg-black/50 backdrop-blur-xl text-white">
+        <Card className="border-border bg-card/40 backdrop-blur-xl text-foreground">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold tracking-tight text-white">Sign In</CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardTitle className="text-2xl font-bold tracking-tight text-foreground">Sign In</CardTitle>
+            <CardDescription className="text-muted-foreground">
               Enter your email and password to access the Attendance System
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-zinc-300">Email</Label>
+                <Label htmlFor="email" className="text-foreground">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -70,18 +70,18 @@ function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-zinc-900 border-zinc-800 text-white placeholder-zinc-500 focus:ring-zinc-700"
+                  className="bg-muted border-border text-foreground placeholder-muted-foreground focus:ring-ring"
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="password" className="text-zinc-300">Password</Label>
+                <Label htmlFor="password" className="text-foreground">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-zinc-900 border-zinc-800 text-white focus:ring-zinc-700"
+                  className="bg-muted border-border text-foreground focus:ring-ring"
                 />
               </div>
               {errorMsg && (
@@ -92,7 +92,7 @@ function Login() {
               <Button
                 type="submit"
                 disabled={mutation.isPending}
-                className="w-full bg-white text-black hover:bg-zinc-200 mt-2 font-medium"
+                className="w-full bg-primary text-primary-foreground hover:bg-primary/90 mt-2 font-medium"
               >
                 {mutation.isPending ? 'Signing In...' : 'Sign In'}
               </Button>

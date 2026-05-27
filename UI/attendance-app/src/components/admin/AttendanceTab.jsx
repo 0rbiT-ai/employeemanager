@@ -112,12 +112,12 @@ export default function AttendanceTab() {
   };
 
   return (
-    <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
+    <Card className="bg-card/40 backdrop-blur-xl border-border">
       <CardHeader>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <CardTitle className="text-white text-lg">Attendance Logs</CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardTitle className="text-foreground text-lg">Attendance Logs</CardTitle>
+            <CardDescription className="text-muted-foreground">
               View all employee attendance records
             </CardDescription>
           </div>
@@ -129,20 +129,20 @@ export default function AttendanceTab() {
             placeholder="Search by employee name..."
             value={nameFilter}
             onChange={(e) => setNameFilter(e.target.value)}
-            className="sm:w-64 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+            className="sm:w-64 bg-muted border-border text-foreground placeholder:text-muted-foreground focus:border-ring"
           />
           <Input
             type="date"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
-            className="sm:w-48 bg-zinc-900 border-zinc-700 text-white focus:border-zinc-500"
+            className="sm:w-48 bg-muted border-border text-foreground focus:border-ring"
           />
           {(nameFilter || dateFilter) && (
             <Button
               variant="ghost"
               size="sm"
               onClick={handleClearFilters}
-              className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+              className="text-muted-foreground hover:text-foreground hover:bg-secondary"
             >
               Clear
             </Button>
@@ -151,7 +151,7 @@ export default function AttendanceTab() {
       </CardHeader>
       <CardContent>
         {isLoading && (
-          <p className="text-zinc-400 text-sm py-4">Loading attendance logs...</p>
+          <p className="text-muted-foreground text-sm py-4">Loading attendance logs...</p>
         )}
 
         {isError && (
@@ -160,20 +160,20 @@ export default function AttendanceTab() {
 
         {!isLoading && !isError && (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-zinc-300 text-sm">
-              <thead className="border-b border-zinc-800">
+            <table className="w-full text-left text-foreground text-sm">
+              <thead className="border-b border-border">
                 <tr>
-                  <th className="py-3 px-4 font-medium text-zinc-400">Employee</th>
-                  <th className="py-3 px-4 font-medium text-zinc-400">Date</th>
-                  <th className="py-3 px-4 font-medium text-zinc-400">Sessions</th>
-                  <th className="py-3 px-4 font-medium text-zinc-400">Total Working Time</th>
-                  <th className="py-3 px-4 font-medium text-zinc-400">Status</th>
+                  <th className="py-3 px-4 font-medium text-muted-foreground">Employee</th>
+                  <th className="py-3 px-4 font-medium text-muted-foreground">Date</th>
+                  <th className="py-3 px-4 font-medium text-muted-foreground">Sessions</th>
+                  <th className="py-3 px-4 font-medium text-muted-foreground">Total Working Time</th>
+                  <th className="py-3 px-4 font-medium text-muted-foreground">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-900">
+              <tbody className="divide-y divide-border">
                 {filteredLogs.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-6 px-4 text-center text-zinc-500">
+                    <td colSpan={5} className="py-6 px-4 text-center text-muted-foreground">
                       {nameFilter || dateFilter
                         ? 'No attendance records match your filters.'
                         : 'No attendance records found.'}
@@ -184,23 +184,23 @@ export default function AttendanceTab() {
                     const sessions = log.attendanceSessions || [];
                     const status = getStatus(sessions);
                     return (
-                      <tr key={log.id} className="hover:bg-zinc-900/50 transition-colors">
-                        <td className="py-3 px-4 font-medium text-white">
+                      <tr key={log.id} className="hover:bg-muted/50 transition-colors">
+                        <td className="py-3 px-4 font-medium text-foreground">
                           {log.employee?.name || '—'}
                         </td>
                         <td className="py-3 px-4">{log.date}</td>
                         <td className="py-3 px-4">
                           {sessions.length === 0 ? (
-                            <span className="text-zinc-500">No sessions</span>
+                            <span className="text-muted-foreground">No sessions</span>
                           ) : (
                             <div className="space-y-1">
                               {sessions.map((session) => (
                                 <div key={session.id} className="text-xs">
-                                  <span className="text-zinc-300">
+                                  <span className="text-foreground">
                                     {formatTime(session.checkIn)}
                                   </span>
-                                  <span className="text-zinc-500 mx-1">–</span>
-                                  <span className="text-zinc-300">
+                                  <span className="text-muted-foreground mx-1">–</span>
+                                  <span className="text-foreground">
                                     {session.checkOut ? formatTime(session.checkOut) : '...'}
                                   </span>
                                 </div>

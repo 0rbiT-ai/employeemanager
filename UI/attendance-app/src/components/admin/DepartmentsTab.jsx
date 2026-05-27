@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllDepartments, createDepartment, deleteDepartment } from '../../api';
 import { Button } from '@/components/ui/button';
-
+import {  updateDepartment } from '../../api';
 import {
   Pagination,
   PaginationContent,
@@ -37,6 +37,8 @@ export default function DepartmentsTab() {
   const [message, setMessage] = useState({ type: '', text: '' });
   const [Employee, setEmployee] = useState(0);
   const [isdeleteopen, setIsDeleteOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editDeptId, setEditDeptId] = useState(null);
   const [iscreateopen, setIsCreateOpen] = useState(false);
   const [page,setPage] = useState(0);
   const [size,setSize] = useState(5);
@@ -99,6 +101,24 @@ const {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => updateDepartment(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['departments'] });
+      setIsEditOpen(false);
+      setFormData({ departmentName: '', location: '' });
+      setMessage({ type: 'success', text: 'Department updated successfully!' });
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    },
+    onError: (error) => {
+      setMessage({
+        type: 'error',
+        text: error?.response?.data?.message || 'Failed to update department.',
+      });
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    },
+  });
+
   const handleCreate = (e) => {
     e.preventDefault();
     if (!formData.departmentName.trim() || !formData.location.trim()) return;
@@ -113,6 +133,17 @@ const {
   const confirmDelete = () => {
     deleteMutation.mutate(Employee);
     setIsDeleteOpen(false);
+  };
+  const handleEdit = (dept) => {
+    setEditDeptId(dept.id);
+    setFormData({ departmentName: dept.departmentName || '', location: dept.location || '' });
+    setIsEditOpen(true);
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    if (!formData.departmentName.trim() || !formData.location.trim()) return;
+    updateMutation.mutate({ id: editDeptId, data: formData });
   };
 
   return (
@@ -187,6 +218,14 @@ const {
                           </td>
                           <td className="py-3 px-4">{dept.location}</td>
                           <td className="py-3 px-4">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                              onClick={() => handleEdit(dept)}
+                            >
+                              Edit
+                            </Button>
                             <Button
                               variant="ghost"
                               size="sm"
@@ -413,6 +452,57 @@ const {
               </button>
             </div>
             
+          </div>
+        </div>
+      )}
+      {isEditOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-zinc-900 p-6 rounded-2xl w-full max-w-md border border-zinc-800">
+            <h2 className="text-white text-2xl font-bold mb-2">Edit Department</h2>
+            <p className="text-zinc-400 mb-6">Update department details</p>
+
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="editDepartmentName" className="text-zinc-300">Department Name</Label>
+                <Input
+                  id="editDepartmentName"
+                  type="text"
+                  placeholder="e.g. Engineering"
+                  value={formData.departmentName}
+                  onChange={(e) => setFormData({ ...formData, departmentName: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="editLocation" className="text-zinc-300">Location</Label>
+                <Input
+                  id="editLocation"
+                  type="text"
+                  placeholder="e.g. Building A"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setIsEditOpen(false)}
+                  className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                >
+                  Cancel
+                </button>
+                <Button
+                  type="submit"
+                  className="bg-white text-black hover:bg-zinc-200"
+                  disabled={updateMutation.isPending}
+                >
+                  {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}

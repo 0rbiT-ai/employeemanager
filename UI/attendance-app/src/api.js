@@ -97,6 +97,15 @@ export async function deleteDepartment(id) {
   if (!res.ok) throw new Error('Failed to delete department')
 }
 
+export async function updateDepartment(id, { departmentName, location }) {
+  const res = await fetchWithAuth(`${BASE_URL}/api/departments/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ departmentName, location })
+  })
+  if (!res.ok) throw new Error('Failed to update department')
+  return res.json()
+}
+
 // ─── EMPLOYEES ────────────────────────────────────────────────
 export async function getAllEmployees(page = 0, size = 5) {
   const res = await fetchWithAuth(`${BASE_URL}/api/employees?page=${page}&size=${size}`)

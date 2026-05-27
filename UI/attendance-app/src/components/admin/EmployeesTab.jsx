@@ -175,12 +175,12 @@ export default function EmployeesTab() {
     <div >
       {/* Employee Table */}
       <div className="lg:col-span-2">
-        <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
+        <Card className="bg-card/40 backdrop-blur-xl border-border">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle className="text-white text-lg">All Employees</CardTitle>
-                <CardDescription className="text-zinc-400">
+                <CardTitle className="text-foreground text-lg">All Employees</CardTitle>
+                <CardDescription className="text-muted-foreground">
                   Manage your organization's employees
                 </CardDescription>
               </div>
@@ -192,7 +192,7 @@ export default function EmployeesTab() {
                   setSearchTerm(e.target.value);
                   setPage(0);
                 }}
-                className="sm:w-64 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                className="sm:w-64 bg-muted border-border text-foreground placeholder:text-muted-foreground focus:border-ring"
               />
             </div>
           </CardHeader>
@@ -210,7 +210,7 @@ export default function EmployeesTab() {
             )}
 
             {isLoading && (
-              <p className="text-zinc-400 text-sm py-4">Loading employees...</p>
+              <p className="text-muted-foreground text-sm py-4">Loading employees...</p>
             )}
 
             {isError && (
@@ -220,33 +220,33 @@ export default function EmployeesTab() {
             {!isLoading && !isError && (
               <>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-zinc-300 text-sm">
-                    <thead className="border-b border-zinc-800">
+                  <table className="w-full text-left text-foreground text-sm">
+                    <thead className="border-b border-border">
                       <tr>
-                        <th className="py-3 px-4 font-medium text-zinc-400">#</th>
-                        <th className="py-3 px-4 font-medium text-zinc-400">Name</th>
-                        <th className="py-3 px-4 font-medium text-zinc-400">Email</th>
-                        <th className="py-3 px-4 font-medium text-zinc-400">Role</th>
-                        <th className="py-3 px-4 font-medium text-zinc-400">Department</th>
-                        <th className="py-3 px-4 font-medium text-zinc-400 text-center">Actions</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground">#</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground">Name</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground">Email</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground">Role</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground">Department</th>
+                        <th className="py-3 px-4 font-medium text-muted-foreground text-center">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-zinc-900">
+                    <tbody className="divide-y divide-border">
                       {employees.content.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="py-6 px-4 text-center text-zinc-500">
+                          <td colSpan={6} className="py-6 px-4 text-center text-muted-foreground">
                             {searchTerm ? 'No employees match your search.' : 'No employees found.'}
                           </td>
                         </tr>
                       ) : (
                         employees.content.map((emp, index) => {
                           if(emp.role !== 'Administrator'){
-                            return(<tr key={emp.id} className="hover:bg-zinc-900/50 transition-colors">
+                            return(<tr key={emp.id} className="hover:bg-muted/50 transition-colors">
                               <td className="py-3 px-4">{page * size + index + 1}</td>
-                              <td className="py-3 px-4 font-medium text-white">{emp.name}</td>
+                              <td className="py-3 px-4 font-medium text-foreground">{emp.name}</td>
                               <td className="py-3 px-4">{emp.email}</td>
                               <td className="py-3 px-4">
-                                <span className="px-2 py-0.5 rounded-full text-xs bg-zinc-800 text-zinc-300">
+                                <span className="px-2 py-0.5 rounded-full text-xs bg-secondary text-foreground">
                                   {emp.role}
                                 </span>
                               </td>
@@ -286,7 +286,7 @@ export default function EmployeesTab() {
 
                   <label
                     htmlFor="rows-per-page"
-                    className="text-sm text-zinc-400"
+                    className="text-sm text-muted-foreground"
                   >
                     Rows per page
                   </label>
@@ -300,7 +300,7 @@ export default function EmployeesTab() {
                   >
 
                     <SelectTrigger
-                      className="w-20 bg-zinc-900 border-zinc-700 text-white"
+                      className="w-20 bg-muted border-border text-foreground"
                       id="rows-per-page"
                     >
                       <SelectValue />
@@ -325,7 +325,7 @@ export default function EmployeesTab() {
 
                 <div className="flex items-center gap-4">
 
-                  <span className="text-sm text-zinc-400">
+                  <span className="text-sm text-muted-foreground">
                     Page {page + 1} of {employees.totalPages || 1}
                   </span>
 
@@ -392,17 +392,17 @@ export default function EmployeesTab() {
       
       {isdeleteopen && (
         <div className='fixed inset-0 flex items-center justify-center bg-black/50'>
-          <div className="bg-zinc-900 p-6 rounded-xl w-96">
-            <h2 className="!text-white text-xl font-bold mb-4">
+          <div className="bg-muted p-6 rounded-xl w-96">
+            <h2 className="!text-foreground text-xl font-bold mb-4">
               Delete Employee
             </h2>
-            <p className="text-zinc-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               Are you sure you want to delete this employee? This action cannot be undone.
             </p>
             <div className="flex justify-between gap-4 mt-6">
               <button
               onClick={() => setIsDeleteOpen(false)}
-              className="px-4 py-2 rounded-lg bg-zinc-700"
+              className="px-4 py-2 rounded-lg bg-accent"
               >
                 Cancel
               </button>
@@ -420,23 +420,23 @@ export default function EmployeesTab() {
       {isCreateOpen && (
   <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
 
-    <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
+    <div className="bg-card border border-border rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
 
       <div className="flex items-center justify-between mb-6">
 
         <div>
-          <h2 className="text-white text-2xl font-bold">
+          <h2 className="text-foreground text-2xl font-bold">
             Create Employee
           </h2>
 
-          <h3 className="text-zinc-400 text-sm mt-1 ">
+          <h3 className="text-muted-foreground text-sm mt-1 ">
             Add a new employee to the organization
           </h3>
         </div>
 
         <button
           onClick={() => setIsCreateOpen(false)}
-          className="text-zinc-400 hover:text-white text-xl"
+          className="text-muted-foreground hover:text-foreground text-xl"
         >
           ✕
         </button>
@@ -460,7 +460,7 @@ export default function EmployeesTab() {
             <div className="grid grid-cols-2 gap-4">
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Name</Label>
+                <Label className="text-foreground">Name</Label>
 
                 <Input
                   type="text"
@@ -469,12 +469,12 @@ export default function EmployeesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Email</Label>
+                <Label className="text-foreground">Email</Label>
 
                 <Input
                   type="email"
@@ -483,12 +483,12 @@ export default function EmployeesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Password</Label>
+                <Label className="text-foreground">Password</Label>
 
                 <Input
                   type="text"
@@ -497,12 +497,12 @@ export default function EmployeesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Phone</Label>
+                <Label className="text-foreground">Phone</Label>
 
                 <Input
                   type="text"
@@ -511,12 +511,12 @@ export default function EmployeesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, phone: e.target.value })
                   }
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Role</Label>
+                <Label className="text-foreground">Role</Label>
 
                 <Input
                   type="text"
@@ -525,12 +525,12 @@ export default function EmployeesTab() {
                   onChange={(e) =>
                     setFormData({ ...formData, role: e.target.value })
                   }
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Department</Label>
+                <Label className="text-foreground">Department</Label>
 
                 <select
                   value={formData.departmentId}
@@ -540,7 +540,7 @@ export default function EmployeesTab() {
                       departmentId: e.target.value,
                     })
                   }
-                  className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm"
+                  className="w-full rounded-md bg-muted border border-border text-foreground px-3 py-2 text-sm"
                 >
                   <option value="">Select a department</option>
 
@@ -565,7 +565,7 @@ export default function EmployeesTab() {
 
               <Button
                 type="submit"
-                className="bg-white text-black hover:bg-zinc-200"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 {createMutation.isPending
                   ? 'Creating...'
@@ -583,15 +583,15 @@ export default function EmployeesTab() {
 
     {isEditOpen && (
       <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-        <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
+        <div className="bg-card border border-border rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-white text-2xl font-bold">Edit Employee</h2>
-              <h3 className="text-zinc-400 text-sm mt-1">Update employee details</h3>
+              <h2 className="text-foreground text-2xl font-bold">Edit Employee</h2>
+              <h3 className="text-muted-foreground text-sm mt-1">Update employee details</h3>
             </div>
             <button
               onClick={() => setIsEditOpen(false)}
-              className="text-zinc-400 hover:text-white text-xl"
+              className="text-muted-foreground hover:text-foreground text-xl"
             >
               ✕
             </button>
@@ -600,61 +600,61 @@ export default function EmployeesTab() {
           <form onSubmit={handleUpdate} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-zinc-300">Name</Label>
+                <Label className="text-foreground">Name</Label>
                 <Input
                   type="text"
                   placeholder="Enter Name"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-300">Email</Label>
+                <Label className="text-foreground">Email</Label>
                 <Input
                   type="email"
                   placeholder="name@company.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-300">Password</Label>
+                <Label className="text-foreground">Password</Label>
                 <Input
                   type="text"
                   placeholder="Enter New Password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-300">Phone</Label>
+                <Label className="text-foreground">Phone</Label>
                 <Input
                   type="text"
                   placeholder="+91 XXXXX XXXXX"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-300">Role</Label>
+                <Label className="text-foreground">Role</Label>
                 <Input
                   type="text"
                   placeholder="Software Engineer"
                   value={formData.role}
                   onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white"
+                  className="bg-muted border-border text-foreground"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-zinc-300">Department</Label>
+                <Label className="text-foreground">Department</Label>
                 <select
                   value={formData.departmentId}
                   onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
-                  className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm"
+                  className="w-full rounded-md bg-muted border border-border text-foreground px-3 py-2 text-sm"
                 >
                   <option value="">Select a department</option>
                   {departments.content.map((dept) => (
@@ -672,7 +672,7 @@ export default function EmployeesTab() {
               </Button>
               <Button
                 type="submit"
-                className="bg-white text-black hover:bg-zinc-200"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
                 disabled={updateMutation.isPending}
               >
                 {updateMutation.isPending ? 'Saving...' : 'Save changes'}

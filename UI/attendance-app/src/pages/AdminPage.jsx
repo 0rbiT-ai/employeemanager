@@ -46,20 +46,40 @@ export default function AdminPage() {
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex gap-2 mb-6">
-          {tabs.map((t) => (
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex gap-2">
+            {tabs.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  tab === t.key
+                    ? 'bg-white text-black'
+                    : 'bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {tab === 'departments' && (
             <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                tab === t.key
-                  ? 'bg-white text-black'
-                  : 'bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200'
-              }`}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-create-dept'))}
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200 transition-colors"
             >
-              {t.label}
+              + Create department
             </button>
-          ))}
+          )}
+
+          {tab === 'employees' && (
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('open-create-emp'))}
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200 transition-colors"
+            >
+              + Create employee
+            </button>
+          )}
         </div>
 
         {/* Tab Content */}

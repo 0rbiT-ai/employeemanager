@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllEmployees, createEmployee, deleteEmployee, getAllDepartments } from '../../api';
 import { Button } from '@/components/ui/button';
@@ -45,6 +45,13 @@ export default function EmployeesTab() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isdeleteopen, setIsDeleteOpen] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+
+  useEffect(() => {
+    const handler = () => setIsCreateOpen(true);
+    window.addEventListener('open-create-emp', handler);
+    return () => window.removeEventListener('open-create-emp', handler);
+  }, []);
+
   const {
     data: employees = { content: [] },
     isLoading,
@@ -129,11 +136,7 @@ export default function EmployeesTab() {
   });
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <button onClick={() => setIsCreateOpen(true)}
-          className="bg-zinc-900 text-zinc-400 hover:text-white border border-radius-70 px-1 py-1 rounded-lg mb-4 w-full">
-          Create Employee
-        </button>
+    <div >
       {/* Employee Table */}
       <div className="lg:col-span-2">
         <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllDepartments, createDepartment, deleteDepartment } from '../../api';
 import { Button } from '@/components/ui/button';
+
 import {
   Pagination,
   PaginationContent,
@@ -39,7 +40,15 @@ export default function DepartmentsTab() {
   const [iscreateopen, setIsCreateOpen] = useState(false);
   const [page,setPage] = useState(0);
   const [size,setSize] = useState(5);
-  const {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const handler = () => setIsCreateOpen(true);
+    window.addEventListener('open-create-dept', handler);
+    return () => window.removeEventListener('open-create-dept', handler);
+  }, []);
+  
+const {
     data: departments = { content: [] },
     isLoading,
     isError,
@@ -65,6 +74,14 @@ export default function DepartmentsTab() {
       setTimeout(() => setMessage({ type: '', text: '' }), 3000);
     },
   });
+
+  const filteredDepartments = departments.content.filter((dept) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        dept.departmentName?.toLowerCase().includes(term) ||
+        dept.location?.toLowerCase().includes(term)
+      );
+    });
 
   const deleteMutation = useMutation({
     mutationFn: deleteDepartment,
@@ -99,20 +116,27 @@ export default function DepartmentsTab() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div>
       {/* Department Table */}
-      <button onClick={() => setIsCreateOpen(true)}
-          className="bg-zinc-900 text-zinc-400 hover:text-white border border-radius-70 px-1 py-1 rounded-lg mb-4 w-full">
-          Create Department
-        </button>
       
       <div className="lg:col-span-2">
         <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
           <CardHeader>
-            <CardTitle className="text-white text-lg">All Departments</CardTitle>
-            <CardDescription className="text-zinc-400">
-              Manage your organization's departments
-            </CardDescription>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <CardTitle className="text-white text-lg">All Departments</CardTitle>
+                <CardDescription className="text-zinc-400">
+                  Manage your organization's departments
+                </CardDescription>
+              </div>
+              <Input
+                type="text"
+                placeholder="Search by name or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="sm:w-64 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+              />
+            </div>
           </CardHeader>
           <CardContent>
             {message.text && (
@@ -148,14 +172,14 @@ export default function DepartmentsTab() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-900">
-                    {departments.content.length === 0 ? (
+                    {filteredDepartments.length === 0 ? (
                       <tr>
                         <td colSpan={4} className="py-6 px-4 text-center text-zinc-500">
-                          No departments found.
+                          {searchTerm ? 'No departments match your search.' : 'No departments found.'}
                         </td>
                       </tr>
                     ) : (
-                      departments.content.map((dept, index) => (
+                      filteredDepartments.map((dept, index) => (
                         <tr key={dept.id} className="hover:bg-zinc-900/50 transition-colors">
                           <td className="py-3 px-4">{page* size + index + 1}</td>
                           <td className="py-3 px-4 font-medium text-white">

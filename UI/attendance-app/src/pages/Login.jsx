@@ -21,7 +21,7 @@ function Login() {
     onSuccess: (data) => {
       // Decode JWT to get role
       const role = data.role
-      console.log(data.token) // Debug log
+      
       login(data) // Save to context & localStorage
       if (role === 'ADMIN') {
         navigate('/admin')

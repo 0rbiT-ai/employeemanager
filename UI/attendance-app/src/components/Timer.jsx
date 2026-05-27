@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react'
 
 function Timer({ checkinTime, initialMs  }) {
-  const [elapsed, setElapsed] = useState(0)
+  
 
-  useEffect(() => {
-    const updatetimer = () => {
-      const totalms =initialMs+(Date.now()-new Date(checkinTime).getTime())
-      setElapsed(Math.floor(totalms / 1000))
-    }
-    updatetimer()
-    const interval = setInterval(updatetimer ,1000)
+  const calculateelapsed = () => {
+    const livems= Date.now() -new Date(checkinTime).getTime()
+    return Math.floor((initialMs +livems)/1000)
+  }
+  const [elapsed, setElapsed] = useState(calculateelapsed())
+
+    useEffect(() => {
+
+    const interval = setInterval(() => {
+      setElapsed(calculateelapsed())
+    }, 250)
+
     return () => clearInterval(interval)
+
   }, [checkinTime, initialMs])
 
   const hours = Math.floor(elapsed / 3600)

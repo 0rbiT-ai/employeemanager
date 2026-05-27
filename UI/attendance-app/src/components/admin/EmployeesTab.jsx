@@ -265,7 +265,7 @@ export default function EmployeesTab() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                    onClick={() => handleDelete(emp)}
+                                    onClick={() => handleDelete(emp.id)}
                                     disabled={deleteMutation.isPending}
                                   >
                                     Delete
@@ -397,7 +397,7 @@ export default function EmployeesTab() {
               Delete Employee
             </h2>
             <p className="text-muted-foreground mb-6">
-              Are you sure you want to delete this employee? This action cannot be undone.
+              Are you sure you want to delete this employee? This action deletes all employees cannot be undone.
             </p>
             <div className="flex justify-between gap-4 mt-6">
               <button

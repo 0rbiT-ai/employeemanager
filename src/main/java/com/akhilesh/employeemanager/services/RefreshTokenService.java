@@ -29,7 +29,13 @@ public class RefreshTokenService {
     }
 
     public RefreshToken createRefreshToken(UUID id){
-        refreshTokenRepo.findByEmployeeId(id).ifPresent(refreshTokenRepo::delete);//delete token if exists
+        Optional<RefreshToken> existingRefreshToken = refreshTokenRepo.findByEmployeeId(id);
+        if(existingRefreshToken.isPresent()){
+            RefreshToken refreshToken = existingRefreshToken.get();
+            refreshToken.setExpiryDate(new Date(System.currentTimeMillis()+1000L * 60 * 60 * 3));
+            refreshToken.setToken(UUID.randomUUID().toString());
+            return refreshTokenRepo.save(refreshToken);
+        }
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setEmployee(employeeRepo.findById(id).orElseThrow());
         refreshToken.setExpiryDate(new Date(System.currentTimeMillis()+1000L * 60 * 60 * 3));

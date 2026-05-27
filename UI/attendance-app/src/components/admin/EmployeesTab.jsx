@@ -260,7 +260,7 @@ export default function EmployeesTab() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
-                                    onClick={() => handleEdit(dept)}
+                                    onClick={() => handleEdit(emp.id)}
                                   >
                                     Edit
                                   </Button>
@@ -268,7 +268,7 @@ export default function EmployeesTab() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                    onClick={() => handleDelete(dept.id)}
+                                    onClick={() => handleDelete(emp.id)}
                                     disabled={deleteMutation.isPending}
                                   >
                                     Delete

@@ -2,6 +2,7 @@ import { useState , useEffect} from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllEmployees, createEmployee, deleteEmployee, getAllDepartments } from '../../api';
 import { Button } from '@/components/ui/button';
+import {  updateEmployee } from '../../api';
 import {
   Card,
   CardContent,
@@ -34,6 +35,7 @@ export default function EmployeesTab() {
   const [message, setMessage] = useState({ type: '', text: '' });
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -42,7 +44,10 @@ export default function EmployeesTab() {
     password: '',
     departmentId: '',
   });
+
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [editEmployeeId, setEditEmployeeId] = useState(null);
   const [isdeleteopen, setIsDeleteOpen] = useState(false);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
@@ -99,6 +104,24 @@ export default function EmployeesTab() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => updateEmployee(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employees'] });
+      setIsEditOpen(false);
+      setFormData({ name: '', email: '', phone: '', role: '', password: '', departmentId: '' });
+      setMessage({ type: 'success', text: 'Employee updated successfully!' });
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    },
+    onError: (error) => {
+      setMessage({
+        type: 'error',
+        text: error?.response?.data?.message || 'Failed to update employee.',
+      });
+      setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+    },
+  });
+
   const handleCreate = (e) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.departmentId) return;
@@ -123,6 +146,25 @@ export default function EmployeesTab() {
       setIsDeleteOpen(false);
       setSelectedEmployeeId(null);
     }
+  };
+
+  const handleEdit = (emp) => {
+    setEditEmployeeId(emp.id);
+    setFormData({
+      name: emp.name || '',
+      email: emp.email || '',
+      phone: emp.phone || '',
+      role: emp.role || '',
+      password: emp.password || '',
+      departmentId: emp.department?.id || '',
+    });
+    setIsEditOpen(true);
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    if (!formData.name.trim() || !formData.email.trim() || !formData.departmentId) return;
+    updateMutation.mutate({ id: editEmployeeId, data: formData });
   };
 
   const filteredEmployees = employees.content.filter((emp) => {
@@ -213,6 +255,14 @@ export default function EmployeesTab() {
                               </td>
                               <td className="py-3 px-4">{emp.department?.departmentName || '—'}</td>
                               <td className="py-3 px-4">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                                  onClick={() => handleEdit(emp)}
+                                >
+                                  Edit
+                                </Button>
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -442,7 +492,7 @@ export default function EmployeesTab() {
                 <Label className="text-zinc-300">Password</Label>
 
                 <Input
-                  type="password"
+                  type="text"
                   placeholder="Password"
                   value={formData.password}
                   onChange={(e) =>
@@ -502,7 +552,6 @@ export default function EmployeesTab() {
                   ))}
                 </select>
               </div>
-
             </div>
 
             <div className="flex justify-end gap-4 pt-4">
@@ -530,6 +579,108 @@ export default function EmployeesTab() {
 
         </div>
 
+      </div>
+    )}
+
+    {isEditOpen && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="bg-zinc-950 border border-zinc-800 rounded-2xl p-6 w-[700px] max-h-[90vh] overflow-y-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-white text-2xl font-bold">Edit Employee</h2>
+              <h3 className="text-zinc-400 text-sm mt-1">Update employee details</h3>
+            </div>
+            <button
+              onClick={() => setIsEditOpen(false)}
+              className="text-zinc-400 hover:text-white text-xl"
+            >
+              ✕
+            </button>
+          </div>
+
+          <form onSubmit={handleUpdate} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Name</Label>
+                <Input
+                  type="text"
+                  placeholder="Enter Name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Email</Label>
+                <Input
+                  type="email"
+                  placeholder="name@company.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Password</Label>
+                <Input
+                  type="text"
+                  placeholder="Enter New Password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Phone</Label>
+                <Input
+                  type="text"
+                  placeholder="+91 XXXXX XXXXX"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Role</Label>
+                <Input
+                  type="text"
+                  placeholder="Software Engineer"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  className="bg-zinc-900 border-zinc-700 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Department</Label>
+                <select
+                  value={formData.departmentId}
+                  onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })}
+                  className="w-full rounded-md bg-zinc-900 border border-zinc-700 text-white px-3 py-2 text-sm"
+                >
+                  <option value="">Select a department</option>
+                  {departments.content.map((dept) => (
+                    <option key={dept.id} value={dept.id}>
+                      {dept.departmentName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-4 pt-4">
+              <Button type="button" variant="ghost" onClick={() => setIsEditOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                className="bg-white text-black hover:bg-zinc-200"
+                disabled={updateMutation.isPending}
+              >
+                {updateMutation.isPending ? 'Saving...' : 'Save changes'}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     )}
     </div>

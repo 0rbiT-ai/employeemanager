@@ -2,7 +2,17 @@ import Timer from '../Timer'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
+function formatms(ms){
+  const totalseconds = Math.floor(ms/1000)
+  const hours = Math.floor(totalseconds / 3600)
+  const minutes = Math.floor((totalseconds % 3600) / 60)
+  const seconds = totalseconds % 60
+  const pad =(n) => String(n).padStart(2,'0')
+  return `${pad(hours)} : ${pad(minutes)} : ${pad(seconds)}`
+}
+
 export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTime, todayHoursFormatted, todayWorkedTimeMs, checkInMutation, checkOutMutation }) {
+  
   return (
     <Card className="border-border bg-card/40 backdrop-blur-xl text-foreground h-full flex flex-col relative">
       <CardHeader className="pb-0">
@@ -17,7 +27,9 @@ export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTim
           <p className="text-muted-foreground">Loading today's status...</p>
         ) : isCheckedIn ? (
           <div className="text-center space-y-4">
-              <Timer checkinTime={timerCheckinTime} />
+              <Timer checkinTime={timerCheckinTime} 
+              initialMs={todayWorkedTimeMs}
+              />
             <Button
               onClick={() => checkOutMutation.mutate()}
               disabled={checkOutMutation.isPending}
@@ -28,7 +40,7 @@ export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTim
           </div>
         ) : (
           <div className="text-center space-y-4">
-            <h2 className="text-4xl font-mono tracking-wider">00 : 00 : 00</h2>
+            <h2 className="text-4xl font-mono tracking-wider">{formatms(todayWorkedTimeMs)}</h2>
             <Button
               onClick={() => checkInMutation.mutate()}
               disabled={checkInMutation.isPending}

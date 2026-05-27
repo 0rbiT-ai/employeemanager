@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllDepartments, createDepartment, deleteDepartment } from '../../api';
 import { Button } from '@/components/ui/button';
+
 import {
   Pagination,
   PaginationContent,
@@ -39,7 +40,14 @@ export default function DepartmentsTab() {
   const [iscreateopen, setIsCreateOpen] = useState(false);
   const [page,setPage] = useState(0);
   const [size,setSize] = useState(5);
-  const {
+
+  useEffect(() => {
+    const handler = () => setIsCreateOpen(true);
+    window.addEventListener('open-create-dept', handler);
+    return () => window.removeEventListener('open-create-dept', handler);
+  }, []);
+  
+const {
     data: departments = { content: [] },
     isLoading,
     isError,
@@ -99,12 +107,8 @@ export default function DepartmentsTab() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div>
       {/* Department Table */}
-      <button onClick={() => setIsCreateOpen(true)}
-          className="bg-zinc-900 text-zinc-400 hover:text-white border border-radius-70 px-1 py-1 rounded-lg mb-4 w-full">
-          Create Department
-        </button>
       
       <div className="lg:col-span-2">
         <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">

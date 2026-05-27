@@ -34,6 +34,9 @@ public class Employee implements UserDetails {
     private String authRole;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonIgnore
+    @OneToOne(mappedBy = "employee",cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
 
     public Department getDepartment() {
         return department;
@@ -169,5 +172,13 @@ public class Employee implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public RefreshToken getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(RefreshToken refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }

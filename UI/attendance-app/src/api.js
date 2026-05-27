@@ -70,7 +70,7 @@ export async function loginUser(loginData) {
 // ─── DEPARTMENTS ──────────────────────────────────────────────
 export async function getAllDepartments(page = 0, size = 5,search='') {
 
-  const res=await fetchWithAuth(`${BASE_URL}/api/employees/search?employeeName=${search}&page=${page}&size=${size}&order=name&dir=asc`)
+  const res=await fetchWithAuth(`${BASE_URL}/api/departments/search?departmentName=${search}&page=${page}&size=${size}&order=name&dir=asc`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch departments')

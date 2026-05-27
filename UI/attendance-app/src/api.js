@@ -68,11 +68,9 @@ export async function loginUser(loginData) {
 }
 
 // ─── DEPARTMENTS ──────────────────────────────────────────────
-export async function getAllDepartments(page = 0, size = 5) {
+export async function getAllDepartments(page = 0, size = 5,search='') {
 
-  const res = await fetchWithAuth(
-    `${BASE_URL}/api/departments?page=${page}&size=${size}`
-  )
+  const res=await fetchWithAuth(`${BASE_URL}/api/employees/search?employeeName=${search}&page=${page}&size=${size}&order=name&dir=asc`)
 
   if (!res.ok) {
     throw new Error('Failed to fetch departments')
@@ -107,11 +105,7 @@ export async function updateDepartment(id, { departmentName, location }) {
 }
 
 // ─── EMPLOYEES ────────────────────────────────────────────────
-export async function getAllEmployees(page = 0, size = 5) {
-  const res = await fetchWithAuth(`${BASE_URL}/api/employees?page=${page}&size=${size}`)
-  if (!res.ok) throw new Error('Failed to fetch employees')
-  return res.json()
-}
+
 
 export async function createEmployee({ name, email, phone, role, password, departmentId }) {
   const res = await fetchWithAuth(`${BASE_URL}/api/employees`, {
@@ -171,5 +165,15 @@ export async function getAttendanceHistory() {
 export async function getAllAttendanceLogs() {
   const res = await fetchWithAuth(`${BASE_URL}/api/admin/attendances/all`)
   if (!res.ok) throw new Error('Failed to fetch logs')
+  return res.json()
+}
+
+
+
+export async function filteremployees(page=0,size=5,search=''){
+  const res=await fetchWithAuth(`${BASE_URL}/api/employees/search?employeeName=${search}&page=${page}&size=${size}&order=name&dir=asc`)
+  if (!res.ok){
+    throw new Error("Failed to search employees")
+  }
   return res.json()
 }

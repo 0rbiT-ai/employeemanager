@@ -624,7 +624,7 @@ export default function EmployeesTab() {
                 <Label className="text-zinc-300">Password</Label>
                 <Input
                   type="text"
-                  placeholder="Password"
+                  placeholder="Enter New Password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="bg-zinc-900 border-zinc-700 text-white"

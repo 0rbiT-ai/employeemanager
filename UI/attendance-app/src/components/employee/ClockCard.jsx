@@ -12,13 +12,12 @@ export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTim
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col items-center justify-center space-y-6">
+      <CardContent className="flex-1 flex flex-col items-center justify-start pt-16 space-y-6">
         {isLoadingToday ? (
           <p className="text-muted-foreground">Loading today's status...</p>
         ) : isCheckedIn ? (
           <div className="text-center space-y-4">
-            <p className="text-muted-foreground text-sm">Active session duration</p>
-            <Timer checkinTime={timerCheckinTime} />
+              <Timer checkinTime={timerCheckinTime} />
             <Button
               onClick={() => checkOutMutation.mutate()}
               disabled={checkOutMutation.isPending}
@@ -41,7 +40,7 @@ export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTim
         )}
 
         {todayWorkedTimeMs > 0 && (
-          <div className="pt-20 border-t border-border w-full text-center">
+          <div className="pt-25 border-t border-border w-full text-center">
             <p className="text-muted-foreground text-xs">Total completed time today: {todayHoursFormatted}</p>
           </div>
         )}

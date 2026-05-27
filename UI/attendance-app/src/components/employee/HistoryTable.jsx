@@ -1,6 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
-export default function HistoryTable({ isLoadingHistory, historyLogs, getAttendanceTotalHours, fmtHours }) {
+
+export function fmtHours(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.round((seconds % 3600) / 60);
+  const secs = Math.round(seconds % 60);
+  return `${hours}h ${minutes}m ${secs}s`;
+}
+
+export function getSessionDurationSeconds(session, date) {
+  if (!session.checkIn || !session.checkOut) return 0;
+  const cin = new Date(`${date}T${session.checkIn}`);
+  const cout = new Date(`${date}T${session.checkOut}`);
+  return (cout - cin) / 1000;
+}
+
+export function getAttendanceTotalSeconds(attendance) {
+  if (!attendance.attendanceSessions) return 0;
+  return attendance.attendanceSessions.reduce(
+    (sum, s) => sum + getSessionDurationSeconds(s, attendance.date),
+    0
+  );
+}
+export default function HistoryTable({ isLoadingHistory, historyLogs }) {
   return (
     <Card className="border-zinc-800 bg-zinc-950/40 backdrop-blur-xl text-white">
       <CardHeader>
@@ -50,7 +72,7 @@ export default function HistoryTable({ isLoadingHistory, historyLogs, getAttenda
                       </div>
                     </td>
                     <td className="py-3 px-4 text-white font-medium">
-                      {fmtHours(getAttendanceTotalHours(r))}
+                      {fmtHours(getAttendanceTotalSeconds(r))}
                     </td>
                   </tr>
                 ))}

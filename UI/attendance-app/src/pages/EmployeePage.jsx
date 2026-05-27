@@ -120,8 +120,7 @@ export default function EmployeePage() {
         <HistoryTable
           isLoadingHistory={isLoadingHistory}
           historyLogs={historyLogs}
-          getAttendanceTotalHours={getAttendanceTotalHours}
-          fmtHours={fmtHours}
+         
         />
       </div>
     </div>

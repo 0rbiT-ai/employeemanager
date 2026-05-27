@@ -49,9 +49,17 @@ public class DepartmentCriteriaImpl implements DepartmentCriteria{
         List<Department> pageResults = tq.getResultList();
 
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        countQuery.select(cb.count(countQuery.from(Department.class)));
-        long totalCount = em.createQuery(countQuery).getSingleResult();
+        Root<Department> countRoot = countQuery.from(Department.class);
+        List<Predicate> countPredicates = new ArrayList<>();
+        if(departmentName!=null){
+            countPredicates.add(cb.like(cb.lower(countRoot.get("departmentName")), "%"+departmentName.toLowerCase()+"%"));
+        }
+        if(location!=null){
+            countPredicates.add(cb.equal(cb.lower(countRoot.get("location")), location.toLowerCase()));
+        }
+        countQuery.select(cb.count(countRoot)).where(countPredicates.toArray(new Predicate[0]));
+        long filteredCount = em.createQuery(countQuery).getSingleResult();
 
-        return new PageImpl<>(pageResults,pageable,totalCount);
+        return new PageImpl<>(pageResults,pageable,filteredCount);
     }
 }

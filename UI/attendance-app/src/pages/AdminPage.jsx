@@ -23,23 +23,23 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground p-6 relative overflow-hidden">
       {/* Background decorative blur blob */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Admin Dashboard</h1>
-            <p className="text-zinc-400 text-sm mt-1">
+            <p className="text-muted-foreground text-sm mt-1">
               Manage departments, employees, and attendance
             </p>
           </div>
           <Button
             variant="ghost"
             onClick={handleLogout}
-            className="text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800"
+            className="text-muted-foreground hover:text-foreground hover:bg-secondary border border-border"
           >
             Logout
           </Button>
@@ -54,8 +54,8 @@ export default function AdminPage() {
                 onClick={() => setTab(t.key)}
                 className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                   tab === t.key
-                    ? 'bg-white text-black'
-                    : 'bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted border border-border text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {t.label}
@@ -66,7 +66,7 @@ export default function AdminPage() {
           {tab === 'departments' && (
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('open-create-dept'))}
-              className="px-4 py-2 text-sm font-medium rounded-lg bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200 transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-muted border border-border text-muted-foreground hover:text-foreground transition-colors"
             >
               + Create department
             </button>
@@ -75,7 +75,7 @@ export default function AdminPage() {
           {tab === 'employees' && (
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('open-create-emp'))}
-              className="px-4 py-2 text-sm font-medium rounded-lg bg-zinc-900 border border-zinc-700 text-zinc-400 hover:text-zinc-200 transition-colors"
+              className="px-4 py-2 text-sm font-medium rounded-lg bg-muted border border-border text-muted-foreground hover:text-foreground transition-colors"
             >
               + Create employee
             </button>

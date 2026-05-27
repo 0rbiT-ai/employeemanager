@@ -151,12 +151,12 @@ const {
       {/* Department Table */}
       
       <div className="lg:col-span-2">
-        <Card className="bg-zinc-950/40 backdrop-blur-xl border-zinc-800">
+        <Card className="bg-card/40 backdrop-blur-xl border-border">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle className="text-white text-lg">All Departments</CardTitle>
-                <CardDescription className="text-zinc-400">
+                <CardTitle className="text-foreground text-lg">All Departments</CardTitle>
+                <CardDescription className="text-muted-foreground">
                   Manage your organization's departments
                 </CardDescription>
               </div>
@@ -165,7 +165,7 @@ const {
                 placeholder="Search by name or location..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="sm:w-64 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
+                className="sm:w-64 bg-muted border-border text-foreground placeholder:text-muted-foreground focus:border-ring"
               />
             </div>
           </CardHeader>
@@ -183,7 +183,7 @@ const {
             )}
 
             {isLoading && (
-              <p className="text-zinc-400 text-sm py-4">Loading departments...</p>
+              <p className="text-muted-foreground text-sm py-4">Loading departments...</p>
             )}
 
             {isError && (
@@ -193,27 +193,27 @@ const {
             {!isLoading && !isError && (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-zinc-300 text-sm">
-                  <thead className="border-b border-zinc-800">
+                <table className="w-full text-left text-foreground text-sm">
+                  <thead className="border-b border-border">
                     <tr>
-                      <th className="py-3 px-4 font-medium text-zinc-400">#</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Name</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400">Location</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400 ">Actions</th>
+                      <th className="py-3 px-4 font-medium text-muted-foreground">#</th>
+                      <th className="py-3 px-4 font-medium text-muted-foreground">Name</th>
+                      <th className="py-3 px-4 font-medium text-muted-foreground">Location</th>
+                      <th className="py-3 px-4 font-medium text-muted-foreground text-center">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-zinc-900">
+                  <tbody className="divide-y divide-border">
                     {filteredDepartments.length === 0 ? (
                       <tr>
-                        <td colSpan={4} className="py-6 px-4 text-center text-zinc-500">
+                        <td colSpan={4} className="py-6 px-4 text-center text-muted-foreground">
                           {searchTerm ? 'No departments match your search.' : 'No departments found.'}
                         </td>
                       </tr>
                     ) : (
                       filteredDepartments.map((dept, index) => (
-                        <tr key={dept.id} className="hover:bg-zinc-900/50 transition-colors">
+                        <tr key={dept.id} className="hover:bg-muted/50 transition-colors">
                           <td className="py-3 px-4">{page* size + index + 1}</td>
-                          <td className="py-3 px-4 font-medium text-white">
+                          <td className="py-3 px-4 font-medium text-foreground">
                             {dept.departmentName}
                           </td>
                           <td className="py-3 px-4">{dept.location}</td>
@@ -249,7 +249,7 @@ const {
 
                   <div className="flex items-center gap-2">
 
-                    <label htmlFor="rows-per-page" className="text-sm text-zinc-400">
+                    <label htmlFor="rows-per-page" className="text-sm text-muted-foreground">
                       Rows per page
                     </label>
 
@@ -262,7 +262,7 @@ const {
                     >
 
                       <SelectTrigger
-                        className="w-20 bg-zinc-900 border-zinc-700 text-white"
+                        className="w-20 bg-muted border-border text-foreground"
                         id="rows-per-page"
                       >
                         <SelectValue />
@@ -287,7 +287,7 @@ const {
 
                   <div className="flex items-center gap-4">
 
-                    <span className="text-sm text-zinc-400">
+                    <span className="text-sm text-muted-foreground">
                       Page {page + 1} of {departments.totalPages || 1}
                     </span>
 
@@ -351,21 +351,21 @@ const {
       </div>
 
       {iscreateopen && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-    <div className="bg-zinc-900 p-6 rounded-2xl w-full max-w-md border border-zinc-800">
+  <div className="fixed inset-0 flex items-center justify-center bg-background/80 z-50">
+    <div className="bg-card p-6 rounded-2xl w-full max-w-md border border-border">
 
-      <h2 className="text-white text-2xl font-bold mb-2">
+      <h2 className="text-foreground text-2xl font-bold mb-2">
         Create Department
       </h2>
 
-      <p className="text-zinc-400 mb-6">
+      <p className="text-muted-foreground mb-6">
         Add a new department to the organization
       </p>
 
       <form onSubmit={handleCreate} className="space-y-4">
 
         <div className="space-y-2">
-          <Label htmlFor="departmentName" className="text-zinc-300">
+          <Label htmlFor="departmentName" className="text-foreground">
             Department Name
           </Label>
 
@@ -380,12 +380,12 @@ const {
                 departmentName: e.target.value,
               })
             }
-            className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+            className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location" className="text-zinc-300">
+          <Label htmlFor="location" className="text-foreground">
             Location
           </Label>
 
@@ -400,7 +400,7 @@ const {
                 location: e.target.value,
               })
             }
-            className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+            className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
           />
         </div>
 
@@ -409,14 +409,14 @@ const {
           <button
             type="button"
             onClick={() => setIsCreateOpen(false)}
-            className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+            className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-accent"
           >
             Cancel
           </button>
 
           <Button
             type="submit"
-            className="bg-white text-black hover:bg-zinc-200"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
             disabled={createMutation.isPending}
           >
             {createMutation.isPending
@@ -431,18 +431,18 @@ const {
   </div>
 )}
       {isdeleteopen && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black/50'>
-          <div className="bg-zinc-900 p-6 rounded-xl w-96">
-            <h2 className="!text-white text-xl font-bold mb-4">
+        <div className='fixed inset-0 flex items-center justify-center bg-background/80'>
+          <div className="bg-card p-6 rounded-xl w-96">
+            <h2 className="!text-foreground text-xl font-bold mb-4">
               Delete Department
             </h2>
-            <p className="text-zinc-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               Are you sure you want to delete this department? This action cannot be undone.
             </p>
             <div className="flex justify-between gap-4 mt-6">
               <button
               onClick={() => setIsDeleteOpen(false)}
-              className="px-4 py-2 rounded-lg bg-zinc-700"
+              className="px-4 py-2 rounded-lg bg-accent"
               >
                 Cancel
               </button>
@@ -457,33 +457,33 @@ const {
         </div>
       )}
       {isEditOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-zinc-900 p-6 rounded-2xl w-full max-w-md border border-zinc-800">
-            <h2 className="text-white text-2xl font-bold mb-2">Edit Department</h2>
-            <p className="text-zinc-400 mb-6">Update department details</p>
+        <div className="fixed inset-0 flex items-center justify-center bg-background/80 z-50">
+          <div className="bg-card p-6 rounded-2xl w-full max-w-md border border-border">
+            <h2 className="text-foreground text-2xl font-bold mb-2">Edit Department</h2>
+            <p className="text-muted-foreground mb-6">Update department details</p>
 
             <form onSubmit={handleUpdate} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="editDepartmentName" className="text-zinc-300">Department Name</Label>
+                <Label htmlFor="editDepartmentName" className="text-foreground">Department Name</Label>
                 <Input
                   id="editDepartmentName"
                   type="text"
                   placeholder="e.g. Engineering"
                   value={formData.departmentName}
                   onChange={(e) => setFormData({ ...formData, departmentName: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="editLocation" className="text-zinc-300">Location</Label>
+                <Label htmlFor="editLocation" className="text-foreground">Location</Label>
                 <Input
                   id="editLocation"
                   type="text"
                   placeholder="e.g. Building A"
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+                  className="bg-muted border-border text-foreground placeholder:text-muted-foreground"
                 />
               </div>
 
@@ -491,13 +491,13 @@ const {
                 <button
                   type="button"
                   onClick={() => setIsEditOpen(false)}
-                  className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                  className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground hover:bg-accent"
                 >
                   Cancel
                 </button>
                 <Button
                   type="submit"
-                  className="bg-white text-black hover:bg-zinc-200"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                   disabled={updateMutation.isPending}
                 >
                   {updateMutation.isPending ? 'Saving...' : 'Save Changes'}

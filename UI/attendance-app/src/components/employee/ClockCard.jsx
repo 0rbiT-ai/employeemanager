@@ -4,20 +4,20 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 
 export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTime, todayHoursFormatted, todayWorkedTimeMs, checkInMutation, checkOutMutation }) {
   return (
-    <Card className="border-zinc-800 bg-zinc-950/40 backdrop-blur-xl text-white h-full flex flex-col relative">
+    <Card className="border-border bg-card/40 backdrop-blur-xl text-foreground h-full flex flex-col relative">
       <CardHeader className="pb-0">
-        <CardTitle className="text-white">Clock In/Out</CardTitle>
-        <CardDescription className="text-zinc-400">
+        <CardTitle className="text-foreground">Clock In/Out</CardTitle>
+        <CardDescription className="text-muted-foreground">
           Start or end your daily working session
         </CardDescription>
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col items-center justify-center space-y-6">
         {isLoadingToday ? (
-          <p className="text-zinc-400">Loading today's status...</p>
+          <p className="text-muted-foreground">Loading today's status...</p>
         ) : isCheckedIn ? (
           <div className="text-center space-y-4">
-            <p className="text-zinc-400 text-sm">Active session duration</p>
+            <p className="text-muted-foreground text-sm">Active session duration</p>
             <Timer checkinTime={timerCheckinTime} />
             <Button
               onClick={() => checkOutMutation.mutate()}
@@ -41,8 +41,8 @@ export default function ClockCard({ isLoadingToday, isCheckedIn, timerCheckinTim
         )}
 
         {todayWorkedTimeMs > 0 && (
-          <div className="pt-20 border-t border-zinc-800 w-full text-center">
-            <p className="text-zinc-500 text-xs">Total completed time today: {todayHoursFormatted}</p>
+          <div className="pt-20 border-t border-border w-full text-center">
+            <p className="text-muted-foreground text-xs">Total completed time today: {todayHoursFormatted}</p>
           </div>
         )}
       </CardContent>

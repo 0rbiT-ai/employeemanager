@@ -84,17 +84,17 @@ export default function EmployeePage() {
   const avg7 = last7.length > 0 ? total7 / last7.length : 0
 
   return (
-    <div className="bg-black text-white relative">
-      <div className="absolute w-[500px] h-[500px] bg-blue-500/10 blur-3xl rounded-full top-[-100px] left-[-100px] pointer-events-none" />
+    <div className="bg-background text-foreground relative">
+      <div className="absolute w-[500px] h-[500px] bg-primary/10 blur-3xl rounded-full top-[-100px] left-[-100px] pointer-events-none" />
 
       {/* PAGE 1 — full viewport */}
       <div className="min-h-screen flex flex-col p-6 relative z-10">
         <div className="max-w-5xl mx-auto w-full flex flex-col flex-1">
 
-          <header className="flex justify-between items-center border-b border-zinc-800 pb-4 mb-6">
+          <header className="flex justify-between items-center border-b border-border pb-4 mb-6">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-white">Welcome, {employeeName}</h1>
-              <p className="text-zinc-400">Manage your attendance and track your working hours</p>
+              <h1 className="text-3xl font-bold tracking-tight text-foreground">Welcome, {employeeName}</h1>
+              <p className="text-muted-foreground">Manage your attendance and track your working hours</p>
             </div>
             <Button onClick={() => { logout(); navigate('/login') }} variant="destructive">
               Logout
@@ -127,10 +127,10 @@ export default function EmployeePage() {
 
           {/* Scroll indicator pinned to bottom of page 1 */}
           <div className="flex flex-col items-center justify-center py-6 gap-1 ">
-            <span className="text-zinc-500 text-sm">Scroll down for attendance history</span>
+            <span className="text-muted-foreground text-sm">Scroll down for attendance history</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-zinc-500"
+              className="h-5 w-5 text-muted-foreground"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

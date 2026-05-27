@@ -199,7 +199,7 @@ const {
                       <th className="py-3 px-4 font-medium text-zinc-400">#</th>
                       <th className="py-3 px-4 font-medium text-zinc-400">Name</th>
                       <th className="py-3 px-4 font-medium text-zinc-400">Location</th>
-                      <th className="py-3 px-4 font-medium text-zinc-400 text-center">Actions</th>
+                      <th className="py-3 px-4 font-medium text-zinc-400 ">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-900">

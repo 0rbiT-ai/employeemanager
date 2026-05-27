@@ -1,6 +1,8 @@
 package com.akhilesh.employeemanager.services;
 
+import com.akhilesh.employeemanager.entities.Attendance;
 import com.akhilesh.employeemanager.entities.Employee;
+import com.akhilesh.employeemanager.repository.AttendanceRepo;
 import com.akhilesh.employeemanager.repository.EmployeeRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +19,13 @@ import java.util.UUID;
 
 @Service
 public class EmployeeService {
+    private final AttendanceRepo attendanceRepo;
     private final EmployeeRepo employeeRepo;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public EmployeeService(EmployeeRepo employeeRepo, PasswordEncoder passwordEncoder) {
+    public EmployeeService(AttendanceRepo attendanceRepo, EmployeeRepo employeeRepo, PasswordEncoder passwordEncoder) {
+        this.attendanceRepo = attendanceRepo;
         this.employeeRepo = employeeRepo;
         this.passwordEncoder = passwordEncoder;
     }
@@ -77,6 +81,8 @@ public class EmployeeService {
     }
     public void deleteEmployeeById(UUID id){
         Employee employee = getEmployeeById(id); // to prevent silent failure of .delete(id)
+        List<Attendance> attendances = attendanceRepo.findByEmployeeOrderByDateDesc(employee);
+        attendanceRepo.deleteAll(attendances);
         employeeRepo.delete(employee);// find and pass employee
     }
 }

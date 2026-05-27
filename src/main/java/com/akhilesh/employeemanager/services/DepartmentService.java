@@ -1,7 +1,9 @@
 package com.akhilesh.employeemanager.services;
 
 import com.akhilesh.employeemanager.entities.Department;
+import com.akhilesh.employeemanager.entities.Employee;
 import com.akhilesh.employeemanager.repository.DepartmentRepo;
+import com.akhilesh.employeemanager.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +17,11 @@ import java.util.UUID;
 @Service
 public class DepartmentService {
     private final DepartmentRepo departmentRepo;
+    private final EmployeeRepo employeeRepo;
     @Autowired
-    public DepartmentService(DepartmentRepo departmentRepo) {
+    public DepartmentService(DepartmentRepo departmentRepo, EmployeeRepo employeeRepo) {
         this.departmentRepo = departmentRepo;
+        this.employeeRepo = employeeRepo;
     }
 
     public Page<Department> getAllDepartments(Pageable pageable){
@@ -50,6 +54,8 @@ public class DepartmentService {
 
     public void deleteDepartmentById(UUID id){
         Department department = getDepartmentById(id);
+        List<Employee> employees = employeeRepo.findByDepartment(department);
+        employeeRepo.deleteAll(employees);
         departmentRepo.delete(department);
     }
 }

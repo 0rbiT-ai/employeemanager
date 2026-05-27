@@ -55,9 +55,20 @@ public class EmployeeCriteriaImpl implements EmployeeCriteria{
         List<Employee> pageResult = tq.getResultList();
 
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        countQuery.select(cb.count(countQuery.from(Employee.class)));
-        long totalCount = em.createQuery(countQuery).getSingleResult();
+        Root<Employee> countRoot=countQuery.from(Employee.class);
+        List<Predicate> countPredicates = new ArrayList<>();
+        if(name!=null){
+            countPredicates.add(cb.like(cb.lower(countRoot.get("name")),"%"+name.toLowerCase()+"%"));
+        }
+        if(role!=null){
+            countPredicates.add(cb.equal(cb.lower(countRoot.get("role")),role.toLowerCase()));
+        }
+        if(departmentName!=null){
+            countPredicates.add(cb.equal(cb.lower(countRoot.get("department").get("departmentName")),departmentName.toLowerCase()));
+        }
+        countQuery.select(cb.count(countRoot)).where(countPredicates.toArray(new Predicate[0]));
+        long filteredCount = em.createQuery(countQuery).getSingleResult();
 
-        return new PageImpl<>(pageResult,pageable,totalCount);
+        return new PageImpl<>(pageResult,pageable,filteredCount);
     }
 }

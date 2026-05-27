@@ -68,7 +68,7 @@ export default function EmployeesTab() {
 
   const { data: departments = {content: [] } } = useQuery({
     queryKey: ['departments',page,size],
-    queryFn: () => getAllDepartments(0,100),
+    queryFn: () => getAllDepartments(0,1000),
   });
 
   const createMutation = useMutation({

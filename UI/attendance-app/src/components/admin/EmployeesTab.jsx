@@ -246,9 +246,9 @@ export default function EmployeesTab() {
                               <td className="py-3 px-4 font-medium text-foreground">{emp.name}</td>
                               <td className="py-3 px-4">{emp.email}</td>
                               <td className="py-3 px-4">
-                                <span className="px-2 py-0.5 rounded-full text-xs bg-secondary text-foreground">
+                                
                                   {emp.role}
-                                </span>
+                                
                               </td>
                               <td className="py-3 px-4">{emp.department?.departmentName || '—'}</td>
                               <td className="py-3 px-4">

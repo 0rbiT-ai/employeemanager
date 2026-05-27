@@ -55,8 +55,8 @@ const {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['departments',page,size],
-    queryFn: () => getAllDepartments(page,size),
+    queryKey: ['departments',page,size,searchTerm],
+    queryFn: () => getAllDepartments(page,size,searchTerm),
   });
 
   const createMutation = useMutation({
@@ -77,13 +77,7 @@ const {
     },
   });
 
-  const filteredDepartments = departments.content.filter((dept) => {
-      const term = searchTerm.toLowerCase();
-      return (
-        dept.departmentName?.toLowerCase().includes(term) ||
-        dept.location?.toLowerCase().includes(term)
-      );
-    });
+ 
 
   const deleteMutation = useMutation({
     mutationFn: deleteDepartment,
@@ -203,14 +197,14 @@ const {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {filteredDepartments.length === 0 ? (
+                    {departments.content.length === 0 ? (
                       <tr>
                         <td colSpan={4} className="py-6 px-4 text-center text-muted-foreground">
                           {searchTerm ? 'No departments match your search.' : 'No departments found.'}
                         </td>
                       </tr>
                     ) : (
-                      filteredDepartments.map((dept, index) => (
+                      departments.content.map((dept, index) => (
                         <tr key={dept.id} className="hover:bg-muted/50 transition-colors">
                           <td className="py-3 px-4">{page* size + index + 1}</td>
                           <td className="py-3 px-4 font-medium text-foreground">

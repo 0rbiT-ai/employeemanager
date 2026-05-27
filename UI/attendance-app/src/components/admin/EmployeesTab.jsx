@@ -1,6 +1,6 @@
 import { useState , useEffect} from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAllEmployees, createEmployee, deleteEmployee, getAllDepartments } from '../../api';
+import { createEmployee, deleteEmployee, getAllDepartments,filteremployees } from '../../api';
 import { Button } from '@/components/ui/button';
 import {  updateEmployee } from '../../api';
 import {
@@ -35,7 +35,7 @@ export default function EmployeesTab() {
   const [message, setMessage] = useState({ type: '', text: '' });
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -62,8 +62,8 @@ export default function EmployeesTab() {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['employees',page,size],
-    queryFn: () => getAllEmployees(page, size),
+    queryKey: ['employees',page,size,searchTerm],
+    queryFn: () => filteremployees(page, size, searchTerm),
   });
 
   const { data: departments = {content: [] } } = useQuery({
@@ -167,15 +167,9 @@ export default function EmployeesTab() {
     updateMutation.mutate({ id: editEmployeeId, data: formData });
   };
 
-  const filteredEmployees = employees.content.filter((emp) => {
-    const term = searchTerm.toLowerCase();
-    return (
-      emp.name?.toLowerCase().includes(term) ||
-      emp.email?.toLowerCase().includes(term) ||
-      emp.role?.toLowerCase().includes(term)||
-      emp.department?.departmentName?.toLowerCase().includes(term)
-    );
-  });
+
+    
+ 
 
   return (
     <div >
@@ -194,7 +188,10 @@ export default function EmployeesTab() {
                 type="text"
                 placeholder="Search by name, email, or role..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPage(0);
+                }}
                 className="sm:w-64 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500"
               />
             </div>
@@ -235,17 +232,17 @@ export default function EmployeesTab() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-zinc-900">
-                      {filteredEmployees.length === 0 ? (
+                      {employees.content.length === 0 ? (
                         <tr>
                           <td colSpan={6} className="py-6 px-4 text-center text-zinc-500">
                             {searchTerm ? 'No employees match your search.' : 'No employees found.'}
                           </td>
                         </tr>
                       ) : (
-                        filteredEmployees.map((emp, index) => {
+                        employees.content.map((emp, index) => {
                           if(emp.role !== 'Administrator'){
                             return(<tr key={emp.id} className="hover:bg-zinc-900/50 transition-colors">
-                              <td className="py-3 px-4">{page * size + index }</td>
+                              <td className="py-3 px-4">{page * size + index + 1}</td>
                               <td className="py-3 px-4 font-medium text-white">{emp.name}</td>
                               <td className="py-3 px-4">{emp.email}</td>
                               <td className="py-3 px-4">
@@ -260,7 +257,7 @@ export default function EmployeesTab() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
-                                    onClick={() => handleEdit(emp.id)}
+                                    onClick={() => handleEdit(emp)}
                                   >
                                     Edit
                                   </Button>
@@ -268,7 +265,7 @@ export default function EmployeesTab() {
                                     variant="ghost"
                                     size="sm"
                                     className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                                    onClick={() => handleDelete(emp.id)}
+                                    onClick={() => handleDelete(emp)}
                                     disabled={deleteMutation.isPending}
                                   >
                                     Delete

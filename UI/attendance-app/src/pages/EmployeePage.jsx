@@ -84,45 +84,75 @@ export default function EmployeePage() {
   const avg7 = last7.length > 0 ? total7 / last7.length : 0
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 relative">
+    <div className="bg-black text-white relative">
       <div className="absolute w-[500px] h-[500px] bg-blue-500/10 blur-3xl rounded-full top-[-100px] left-[-100px] pointer-events-none" />
 
-      <div className="max-w-5xl mx-auto space-y-6 relative z-10">
-        <header className="flex justify-between items-center border-b border-zinc-800 pb-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Welcome, {employeeName}</h1>
-            <p className="text-zinc-400">Manage your attendance and track your working hours</p>
-          </div>
-          <Button onClick={() => { logout(); navigate('/login') }} variant="destructive">
-            Logout
-          </Button>
-        </header>
+      {/* PAGE 1 — full viewport */}
+      <div className="min-h-screen flex flex-col p-6 relative z-10">
+        <div className="max-w-5xl mx-auto w-full flex flex-col flex-1">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <ClockCard
-            isLoadingToday={isLoadingToday}
-            isCheckedIn={isCheckedIn}
-            timerCheckinTime={timerCheckinTime}
-            todayHoursFormatted={fmtHours(todayWorkedTimeMs / 3600000)}
-            todayWorkedTimeMs={todayWorkedTimeMs}
-            checkInMutation={checkInMutation}
-            checkOutMutation={checkOutMutation}
-          />
-          <StatsCard
+          <header className="flex justify-between items-center border-b border-zinc-800 pb-4 mb-6">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight text-white">Welcome, {employeeName}</h1>
+              <p className="text-zinc-400">Manage your attendance and track your working hours</p>
+            </div>
+            <Button onClick={() => { logout(); navigate('/login') }} variant="destructive">
+              Logout
+            </Button>
+          </header>
+
+          {/* Cards — flex-1 so they fill remaining space */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0">
+            <div className="md:col-span-2 flex flex-col">
+              <ClockCard
+                isLoadingToday={isLoadingToday}
+                isCheckedIn={isCheckedIn}
+                timerCheckinTime={timerCheckinTime}
+                todayHoursFormatted={fmtHours(todayWorkedTimeMs / 3600000)}
+                todayWorkedTimeMs={todayWorkedTimeMs}
+                checkInMutation={checkInMutation}
+                checkOutMutation={checkOutMutation}
+              />
+            </div>
+            <div className="flex flex-col">
+              <StatsCard
+                isLoadingHistory={isLoadingHistory}
+                last7={last7}
+                total7={total7}
+                avg7={avg7}
+                fmtHours={fmtHours}
+              />
+            </div>
+          </div>
+
+          {/* Scroll indicator pinned to bottom of page 1 */}
+          <div className="flex flex-col items-center justify-center py-6 gap-1 ">
+            <span className="text-zinc-500 text-sm">Scroll down for attendance history</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-zinc-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+
+        </div>
+      </div>
+
+      {/* PAGE 2 — history, min-h-screen so scrolling fully hides the arrow */}
+      <div className="min-h-screen p-6 relative z-10">
+        <div className="max-w-5xl mx-auto">
+          <HistoryTable
             isLoadingHistory={isLoadingHistory}
-            last7={last7}
-            total7={total7}
-            avg7={avg7}
-            fmtHours={fmtHours}
+            historyLogs={historyLogs}
           />
         </div>
-
-        <HistoryTable
-          isLoadingHistory={isLoadingHistory}
-          historyLogs={historyLogs}
-         
-        />
       </div>
+
     </div>
   )
 }

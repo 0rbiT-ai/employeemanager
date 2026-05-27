@@ -120,6 +120,15 @@ export async function deleteEmployee(id) {
   if (!res.ok) throw new Error('Failed to delete employee')
 }
 
+export async function updateEmployee(id, { name, email, phone, role, password, departmentId }) {
+  const res = await fetchWithAuth(`${BASE_URL}/api/employees/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ name, email, phone, role, password, authRole: 'EMPLOYEE', department: { id: departmentId } })
+  })
+  if (!res.ok) throw new Error('Failed to update employee')
+  return res.json()
+}
+
 // ─── ATTENDANCE (employee) ────────────────────────────────────
 export async function checkIn() {
   const res = await fetchWithAuth(`${BASE_URL}/api/attendances/checkin`, {
